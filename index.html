@@ -184,7 +184,7 @@
       font-weight: 400;
       font-size: clamp(20px, 2.5vw, 28px);
       color: rgba(255, 255, 255, 0.75);
-      letter-spacing: 0.15em;
+      letter-spacing: 0.08em;
       text-align: center;
       width: 100%;
       padding: 0 24px;
@@ -315,7 +315,6 @@
     }
 
     /* Cosmos-style word stagger: 개별 단어 등장 (opacity+y+blur) */
-    #problem-2 .problem__body .word,
     .solution-intro__sub .word {
       display: inline-block;
       opacity: 0;
@@ -812,7 +811,7 @@
       <section id="problem-1" aria-label="문제 1">
         <div class="problem__content">
           <p class="problem__headline">1,000만 어르신이 혼자입니다.</p>
-          <p class="problem__body">시니어 인구 한국 1,084만, 일본 3,625만.</p>
+          <p class="problem__body">시니어 인구 한국 1,084만, 일본 3,625만</p>
         </div>
       </section>
 
@@ -1127,18 +1126,17 @@
     }
 
     // 단어 래핑 (애니메이션 설정 전 실행)
-    wrapWords('#problem-2 .problem__body');
     wrapWords('.solution-intro__sub');
 
     if (prefersReducedMotion) {
       // Show everything immediately — no animations
-      gsap.set('.hero__title', { opacity: 1, scale: 1 });
-      gsap.set('.hero__desc', { opacity: 1, letterSpacing: '0.08em' });
+      gsap.set('.hero__title', { opacity: 1, scale: 1, filter: 'blur(0px)' });
+      gsap.set('.hero__desc', { opacity: 1 });
       gsap.set('.hero__wave-container', { opacity: 1 });
       gsap.set('.bg-stage__dark', { opacity: 0 });
       gsap.set('#problem-1 .problem__body', { opacity: 1 });
       gsap.set('#problem-2 .problem__headline', { opacity: 1 });
-      gsap.set('#problem-2 .problem__body .word', { opacity: 1, y: 0, filter: 'none' });
+      gsap.set('#problem-2 .problem__body', { opacity: 1, filter: 'none' });
       gsap.set('.solution-intro__text', { opacity: 1 });
       gsap.set('.solution-intro__sub .word', { opacity: 1, y: 0, filter: 'none' });
       gsap.set('.demo__snippet', { opacity: 1 });
@@ -1159,24 +1157,24 @@
       // ── Hero load sequence (time-based) ──
       var heroTL = gsap.timeline({ delay: 0.3 });
 
-      // 1. Title: scale 0.97→1.0 + opacity materialize
+      // 1. Title: blur dissolve materialize
       heroTL.fromTo('.hero__title',
-        { opacity: 0, scale: 0.97, y: 20 },
-        { opacity: 1, scale: 1, y: 0, duration: 1.2, ease: 'power2.out' }
+        { opacity: 0, scale: 1.05, filter: 'blur(12px)' },
+        { opacity: 1, scale: 1, filter: 'blur(0px)', duration: 1.8, ease: 'power2.out' }
       );
 
-      // 2. Description: letter-spacing wide→narrow
+      // 2. Description: 단순 fade-in (정보 확인 역할, 연출 최소화)
       heroTL.fromTo('.hero__desc',
-        { opacity: 0, letterSpacing: '0.35em' },
-        { opacity: 1, letterSpacing: '0.08em', duration: 1.0, ease: 'power3.out' },
-        0.9
+        { opacity: 0 },
+        { opacity: 1, duration: 0.8, ease: 'power1.out' },
+        1.2
       );
 
-      // 3. Wave materialize
+      // 3. Wave materialize (설명 직후 등장)
       heroTL.fromTo('.hero__wave-container',
         { opacity: 0, scale: 0.9 },
         { opacity: 1, scale: 1, duration: 1.5, ease: 'power1.inOut' },
-        0.9
+        1.4
       );
 
       // Enable scroll + setup scroll animations after hero load completes
@@ -1289,34 +1287,32 @@
             });
         });
 
-      // ── problem-1 body: whileInView (blur→clear) ──
-      // 양방향: onEnter + onEnterBack 모두 등장 연출 재생 (cosmos 동일)
+      // ── problem-1 body: whileInView (단순 fade-in) ──
       ScrollTrigger.create({
         trigger: '#problem-1 .problem__content',
         scroller: wrapper,
         start: 'top 80%',
         onEnter: function () {
           gsap.fromTo('#problem-1 .problem__body',
-            { opacity: 0, filter: 'blur(6px)' },
-            { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out', delay: 0.5 }
+            { opacity: 0 },
+            { opacity: 1, duration: 0.8, ease: 'power1.out', delay: 0.5 }
           );
         },
         onEnterBack: function () {
           gsap.fromTo('#problem-1 .problem__body',
-            { opacity: 0, filter: 'blur(6px)' },
-            { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out', delay: 0.5 }
+            { opacity: 0 },
+            { opacity: 1, duration: 0.8, ease: 'power1.out', delay: 0.5 }
           );
         },
         onLeave: function () {
-          gsap.set('#problem-1 .problem__body', { opacity: 0, filter: 'blur(6px)' });
+          gsap.set('#problem-1 .problem__body', { opacity: 0 });
         },
         onLeaveBack: function () {
-          gsap.set('#problem-1 .problem__body', { opacity: 0, filter: 'blur(6px)' });
+          gsap.set('#problem-1 .problem__body', { opacity: 0 });
         }
       });
 
-      // ── problem-2: whileInView (보조 blur + 메인 word stagger) ──
-      // cosmos.so 섹션 4 패턴: 단어별 blur(6px)+y(30)+opacity, stagger 0.12s
+      // ── problem-2: whileInView (보조 blur + 메인 단순 fade) ──
       ScrollTrigger.create({
         trigger: '#problem-2 .problem__content',
         scroller: wrapper,
@@ -1326,22 +1322,28 @@
             { opacity: 0, filter: 'blur(6px)' },
             { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out' }
           );
-          animateWords('#problem-2 .problem__body', 0.6);
+          gsap.fromTo('#problem-2 .problem__body',
+            { opacity: 0, filter: 'blur(8px)' },
+            { opacity: 1, filter: 'blur(0px)', duration: 1.4, ease: 'power2.out', delay: 0.6 }
+          );
         },
         onEnterBack: function () {
           gsap.fromTo('#problem-2 .problem__headline',
             { opacity: 0, filter: 'blur(6px)' },
             { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out' }
           );
-          animateWords('#problem-2 .problem__body', 0.6);
+          gsap.fromTo('#problem-2 .problem__body',
+            { opacity: 0, filter: 'blur(8px)' },
+            { opacity: 1, filter: 'blur(0px)', duration: 1.4, ease: 'power2.out', delay: 0.6 }
+          );
         },
         onLeave: function () {
           gsap.set('#problem-2 .problem__headline', { opacity: 0, filter: 'blur(6px)' });
-          resetWords('#problem-2 .problem__body');
+          gsap.set('#problem-2 .problem__body', { opacity: 0, filter: 'blur(8px)' });
         },
         onLeaveBack: function () {
           gsap.set('#problem-2 .problem__headline', { opacity: 0, filter: 'blur(6px)' });
-          resetWords('#problem-2 .problem__body');
+          gsap.set('#problem-2 .problem__body', { opacity: 0, filter: 'blur(8px)' });
         }
       });
 
