@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Test & Debug artifacts
+test-results/
+screenshots/
+
+# Editor / AI tool configs
+.claude/
+
+# Reference / Analysis files (not part of the app)
+_refs/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*

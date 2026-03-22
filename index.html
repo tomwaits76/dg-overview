@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>모두의 벗 — AI 보이스 동반자 서비스</title>
+  <meta name="description" content="한국, 일본 시니어를 위한 AI 보이스 동반자">
+
+  <!-- OG Tags -->
+  <meta property="og:title" content="모두의 벗 — AI 보이스 동반자 서비스">
+  <meta property="og:description" content="한국, 일본 시니어를 위한 AI 보이스 동반자">
+  <meta property="og:type" content="website">
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@300&display=swap" rel="stylesheet">
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+
+  <!-- GSAP -->
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Lenis smooth scroll (v1.3.17 — cosmos.so 동일 버전) -->
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.3.17/dist/lenis.min.js"></script>
+
+  <style>
+    /* ============================================
+       CSS Variables
+       ============================================ */
+    :root {
+      --terracotta: #D1684E;
+      --terracotta-light: #E57960;
+      --dark: #1C1C1E;
+      --dark-surface: #2C2C2E;
+      --dark-stroke: #3A3A3C;
+      --light: #F5F2EE;
+      --white: #FFFFFF;
+      --text-dark: #1C1C1E;
+      --text-sub: #7A6A62;
+      --text-on-dark-sub: #B8A99E;
+      --font-serif: 'Noto Serif KR', serif;
+      --font-sans: 'Pretendard Variable', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+    }
+
+    /* ============================================
+       Reset + Base
+       ============================================ */
+    *,
+    *::before,
+    *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      text-rendering: optimizeLegibility;
+      overflow: hidden;
+    }
+
+    body {
+      font-family: var(--font-sans);
+      color: var(--text-dark);
+      background: var(--dark);
+      overflow: hidden;
+      word-break: keep-all;
+      overflow-wrap: break-word;
+    }
+
+    /* Lenis wrapper mode (cosmos 동일 구조) */
+    .lenis.lenis-smooth {
+      scroll-behavior: auto !important;
+    }
+
+    .lenis.lenis-stopped {
+      overflow: hidden;
+    }
+
+    /* ============================================
+       Scroll Wrapper — 고정 뷰포트 + 가상 스크롤
+       Lenis가 이 컨테이너의 scrollTop을 제어
+       ============================================ */
+    #scroll-wrapper {
+      position: fixed;
+      inset: 0;
+      height: 100dvh;
+      overflow-y: auto;
+      overflow-x: hidden;
+      overscroll-behavior: none;
+      z-index: 1;
+    }
+
+    /* ============================================
+       Fixed Background Stage
+       Viewport-level color transition layer.
+       Terracotta → dark crossfade happens HERE,
+       so the entire viewport transitions simultaneously.
+       ============================================ */
+    .bg-stage {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background: radial-gradient(ellipse at 50% 40%, var(--terracotta-light), var(--terracotta) 70%);
+      pointer-events: none;
+    }
+
+    .bg-stage__dark {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #151312 0%, var(--dark) 35%, #1A1816 100%);
+      opacity: 0;
+      will-change: opacity;
+    }
+
+    /* Grain texture on bg-stage (terracotta phase) */
+    .bg-stage::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      background-size: 256px;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* ============================================
+       Section 1: Hero
+       ============================================ */
+    #hero {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 90dvh;
+      min-height: 600px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      overflow: hidden;
+    }
+
+    /* Hero group — positioned at viewport center (50dvh), not section center */
+    .hero__group {
+      position: absolute;
+      top: 50dvh;
+      left: 0;
+      width: 100%;
+      transform: translateY(-50%);
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .hero__title {
+      font-family: var(--font-serif);
+      font-weight: 300;
+      font-size: clamp(64px, 10vw, 120px);
+      color: var(--white);
+      letter-spacing: 0.06em;
+      line-height: 1.15;
+      text-align: center;
+      width: 100%;
+      opacity: 0;
+    }
+
+    .hero__wave-container {
+      width: min(60vw, 480px);
+      height: min(60vw, 480px);
+      margin: 20px 0;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .hero__desc {
+      font-family: var(--font-sans);
+      font-weight: 400;
+      font-size: clamp(20px, 2.5vw, 28px);
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: 0.15em;
+      text-align: center;
+      width: 100%;
+      padding: 0 24px;
+      opacity: 0;
+    }
+
+    .hero__wave-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ============================================
+       Section 2: Problem
+       ============================================ */
+    #problem-1,
+    #problem-2 {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100dvh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      overflow: hidden;
+    }
+
+    .problem__content {
+      position: relative;
+      z-index: 2;
+      max-width: 900px;
+      width: 100%;
+      padding: 80px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .problem__headline {
+      font-family: var(--font-sans);
+      font-weight: 700;
+      font-size: clamp(32px, 4.5vw, 56px);
+      color: var(--white);
+      line-height: 1.3;
+      margin-bottom: 48px;
+      white-space: nowrap;
+    }
+
+    .problem__body {
+      font-family: var(--font-sans);
+      font-weight: 400;
+      font-size: clamp(18px, 2.5vw, 24px);
+      color: var(--text-on-dark-sub);
+      line-height: 1.7;
+      max-width: 640px;
+      white-space: nowrap;
+    }
+
+    /* problem-1: body는 whileInView blur로 등장 → 초기 숨김 */
+    #problem-1 .problem__body {
+      opacity: 0;
+    }
+
+    /* problem-2: 보조(headline, 위) + 메인(body, 아래) — 폰트 전체 교체 */
+    #problem-2 .problem__headline {
+      font-weight: 400;
+      font-size: clamp(18px, 2.5vw, 24px);
+      color: var(--text-on-dark-sub);
+      line-height: 1.7;
+      margin-bottom: 32px;
+      opacity: 0;
+    }
+
+    #problem-2 .problem__body {
+      font-weight: 300;
+      font-size: clamp(28px, 4vw, 48px);
+      color: var(--white);
+      line-height: 1.5;
+      max-width: none;
+    }
+
+    /* ============================================
+       Section 3-1: Solution Intro
+       ============================================ */
+    #solution-intro {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100dvh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+    }
+
+    .solution-intro__content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding: 0 40px;
+    }
+
+    /* solution-intro: 보조(__text, 위) + 메인(__sub, 아래) — 폰트 전체 교체 */
+    .solution-intro__text {
+      font-family: var(--font-sans);
+      font-weight: 400;
+      font-size: clamp(18px, 2.5vw, 24px);
+      color: var(--text-on-dark-sub);
+      text-align: center;
+      line-height: 1.7;
+      white-space: nowrap;
+      opacity: 0;
+    }
+
+    .solution-intro__sub {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: clamp(28px, 4vw, 48px);
+      color: var(--white);
+      text-align: center;
+      line-height: 1.5;
+      white-space: nowrap;
+      margin-top: 24px;
+    }
+
+    /* Cosmos-style word stagger: 개별 단어 등장 (opacity+y+blur) */
+    #problem-2 .problem__body .word,
+    .solution-intro__sub .word {
+      display: inline-block;
+      opacity: 0;
+    }
+
+    /* ============================================
+       Section 3-2: Solution Demo
+       ============================================ */
+    #solution-demo {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100dvh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      overflow: hidden;
+    }
+
+    /* 디바이스 목업 — samantha.svg 절대 좌표 기반 재현
+       SVG viewBox: 800×1050, 스크린: 410×890
+       모든 내부 요소는 스크린 상대 % 로 배치
+       --device-h: vw 기반 + clamp (S1,S2와 동일한 스케일링 법칙)
+       뷰포트 높이 변화 → 크기 불변. 뷰포트 폭 변화 → 비례 축소. */
+    .demo__device {
+      --device-h: clamp(300px, 35vw, 500px);
+      flex-shrink: 0;
+      z-index: 2;
+      position: relative;
+      width: calc(var(--device-h) * 440 / 920);
+      height: var(--device-h);
+    }
+
+    .demo__device-frame {
+      position: absolute;
+      inset: 0;
+      background: #1C1C1E;
+      border: 2px solid #3A3A3C;
+      border-radius: calc(var(--device-h) * 50 / 920);
+      overflow: hidden;
+    }
+
+    /* 측면 버튼 — samantha.svg 좌표 기반 (z-index로 frame 위에 표시) */
+    .demo__btn {
+      position: absolute;
+      width: 4px;
+      background: #2C2C2E;
+      border-radius: 2px;
+      z-index: 5;
+    }
+
+    .demo__btn--vol-up {
+      left: -3px;
+      top: 19.6%;
+      height: 6%;
+    }
+
+    .demo__btn--vol-down {
+      left: -3px;
+      top: 27.7%;
+      height: 6%;
+    }
+
+    .demo__btn--power {
+      right: -3px;
+      top: 23.9%;
+      height: 9.2%;
+    }
+
+    .demo__device-screen {
+      position: absolute;
+      top: 1.63%;
+      left: 3.41%;
+      right: 3.41%;
+      bottom: 1.63%;
+      border-radius: calc(var(--device-h) * 35 / 920);
+      background: #111111;
+      overflow: hidden;
+    }
+
+    /* ── 앱 실행 시퀀스 레이어 ── */
+
+    /* Layer 1: 홈 화면 (초기 표시, Step 1-3에서 fade out) */
+    .demo__homescreen {
+      position: absolute;
+      inset: 0;
+      z-index: 4;
+    }
+
+    /* SVG y=220 baseline, font-size 72, Pretendard capH=72.8%
+       시각 중심 = (220 - 72*0.728/2 - 55) / 890 = 15.7% */
+    .demo__home-clock {
+      position: absolute;
+      top: 15.7%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-sans);
+      font-size: calc(var(--device-h) * 72 / 920);
+      font-weight: 200;
+      color: #fff;
+      white-space: nowrap;
+    }
+
+    /* SVG y=260, font-size 16 → 시각 중심 (260 - 16*0.728/2 - 55) / 890 = 22.4% */
+    .demo__home-date {
+      position: absolute;
+      top: 22.4%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-sans);
+      font-size: calc(var(--device-h) * 16 / 920);
+      font-weight: 400;
+      color: #888;
+      letter-spacing: calc(var(--device-h) * 1 / 920);
+      white-space: nowrap;
+    }
+
+    /* SVG y=530, font-size 15 → 시각 중심 (530 - 15*0.728/2 - 55) / 890 = 52.7% */
+    .demo__home-appname {
+      position: absolute;
+      top: 52.7%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-sans);
+      font-size: calc(var(--device-h) * 15 / 920);
+      font-weight: 400;
+      color: #fff;
+      letter-spacing: calc(var(--device-h) * 0.5 / 920);
+      white-space: nowrap;
+    }
+
+    /* Layer 2: 앱 확장 원 — SVG cx=400 cy=450 r=45 → Terracotta 원
+       초기: 작은 원. Step 1-3에서 scale 확대하여 화면 전체 채움 */
+    .demo__app-circle {
+      position: absolute;
+      top: 44.4%;
+      left: 50%;
+      margin-top: calc(var(--device-h) * -45 / 920);
+      margin-left: calc(var(--device-h) * -45 / 920);
+      width: calc(var(--device-h) * 90 / 920);
+      height: calc(var(--device-h) * 90 / 920);
+      border-radius: 50%;
+      background: radial-gradient(70% 70% at 50% 50%, #E57960, #D1684E);
+      z-index: 2;
+    }
+
+    /* Layer 3: 사만다 UI — 파동 + 브랜드 + 상태
+       초기 opacity: 0. Step 1-3에서 앱 확장 완료 후 fade in */
+    .demo__samantha-ui {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      opacity: 0;
+    }
+
+    /* 빛 번짐 — SVG ellipse cx=400 cy=450 rx=ry=250 → flareGradient */
+    .demo__samantha-ui::before {
+      content: '';
+      position: absolute;
+      top: 44.4%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 150%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.05) 50%, transparent 75%);
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* 상단 바 — SVG 절대 좌표 기반 개별 배치 (flex 제거)
+       각 요소를 samantha_02.svg 좌표에서 screen-relative %로 직접 배치 */
+    .demo__topbar {
+      position: absolute;
+      inset: 0;
+      z-index: 5;
+      pointer-events: none;
+    }
+
+    /* SVG x=245 y=87, font-size=15, text-anchor=middle
+       screen-relative center: left=(245-195)/410=12.2%
+       시각 중심 top=(87 - 15*0.728/2 - 55)/890 = 2.98% */
+    .demo__time {
+      position: absolute;
+      left: 12.2%;
+      top: 2.98%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-sans);
+      font-size: calc(var(--device-h) * 15 / 920);
+      font-weight: 600;
+      color: #fff;
+      letter-spacing: calc(var(--device-h) * 0.5 / 920);
+      white-space: nowrap;
+    }
+
+    /* SVG x=335 y=65 w=130 h=32 rx=16
+       screen-relative: left=(335-195)/410=34.15% top=(65-55)/890=1.12% w=130/410=31.71% */
+    .demo__notch {
+      position: absolute;
+      left: 34.15%;
+      top: 1.12%;
+      width: 31.71%;
+      height: calc(var(--device-h) * 32 / 920);
+      background: #000;
+      border-radius: 100px;
+    }
+
+    .demo__camera {
+      /* samantha.svg: r=7 → 14px / 920 = 1.52% of device height */
+      width: calc(var(--device-h) * 14 / 920);
+      height: calc(var(--device-h) * 14 / 920);
+      border-radius: 50%;
+      background: #111;
+      position: absolute;
+      left: 19.2%;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    .demo__camera::after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: calc(var(--device-h) * 6 / 920);
+      height: calc(var(--device-h) * 6 / 920);
+      border-radius: 50%;
+      background: #1A1A3A;
+    }
+
+    /* SVG: 시그널닷 cx=526~542 cy=78, 배터리 translate(555,73)
+       그룹 우측 끝 = 배터리캡 x≈579 → right=(605-579)/410=6.3%
+       수직 중심 = (78-55)/890=2.58% */
+    .demo__indicators {
+      position: absolute;
+      right: 6.3%;
+      top: 2.58%;
+      transform: translateY(-50%);
+      display: flex;
+      align-items: center;
+      gap: calc(var(--device-h) * 4 / 920);
+    }
+
+    .demo__signal-dot {
+      width: calc(var(--device-h) * 4 / 920);
+      height: calc(var(--device-h) * 4 / 920);
+      border-radius: 50%;
+      background: #fff;
+    }
+
+    .demo__battery-icon {
+      margin-left: calc(var(--device-h) * 6 / 920);
+      flex-shrink: 0;
+      width: calc(var(--device-h) * 22 / 920);
+      height: calc(var(--device-h) * 11 / 920);
+    }
+
+    /* 파동 영역 — 중심 43.3% (samantha.svg translate(400,440)) */
+    .demo__wave-area {
+      position: absolute;
+      top: 43.3%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 85%;
+      aspect-ratio: 1;
+    }
+
+    .demo__wave {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* 브랜드 — samantha.svg y=720 baseline → 중심 ~73%
+       font-size: SVG 36/890(screen height) → device-h 비례 */
+    .demo__brand {
+      position: absolute;
+      top: 73%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-serif);
+      font-size: calc(var(--device-h) * 36 / 920);
+      font-weight: 300;
+      color: #fff;
+      letter-spacing: calc(var(--device-h) * 4 / 920);
+      text-align: center;
+      white-space: nowrap;
+      z-index: 2;
+    }
+
+    /* 상태 — samantha.svg y=765 → 중심 ~79%
+       font-size: SVG 18/890 → device-h 비례 */
+    .demo__status {
+      position: absolute;
+      top: 79%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-family: var(--font-sans);
+      font-size: calc(var(--device-h) * 18 / 920);
+      letter-spacing: calc(var(--device-h) * 1 / 920);
+      font-weight: 400;
+      color: #fff;
+      text-align: center;
+      white-space: nowrap;
+      z-index: 2;
+      animation: statusPulse 5s ease-in-out infinite;
+    }
+
+    @keyframes statusPulse {
+
+      0%,
+      100% {
+        opacity: 0.3;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    /* 홈 인디케이터 — samantha.svg y=920 → 97.2% (고정 UI, 항상 표시) */
+    .demo__home-indicator {
+      position: absolute;
+      top: 97.5%;
+      /* SVG center=(920+2.5-55)/890=97.47% */
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 34%;
+      height: calc(var(--device-h) * 5 / 920);
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: calc(var(--device-h) * 2.5 / 920);
+      z-index: 5;
+    }
+
+    /* 방사형 대화 스니펫 — Cosmos S3 패턴 (디바이스 주변 방사형 분포)
+       Step 1-4에서 존별 위치 + 순환 애니메이션 추가 예정 */
+    .demo__snippets {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .demo__snippet {
+      position: absolute;
+      opacity: 0;
+      font-family: var(--font-serif);
+      font-weight: 300;
+      font-size: clamp(13px, 1.2vw, 16px);
+      color: var(--white);
+      line-height: 1.6;
+      max-width: 220px;
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 12px;
+      pointer-events: none;
+    }
+
+    /* ============================================
+       Wave Animation
+       Orbital rotation: SMIL <animateTransform> (samantha.svg 동일)
+       Circle radius: SVG <animate> tags
+       CSS @keyframes: statusPulse only
+       ============================================ */
+
+    /* ============================================
+       Reduced Motion
+       ============================================ */
+    @media (prefers-reduced-motion: reduce) {
+
+      .hero__title,
+      .hero__desc,
+      .hero__wave-container {
+        opacity: 1 !important;
+      }
+    }
+
+    /* ============================================
+       Mobile
+       ============================================ */
+    @media (max-width: 768px) {
+      .hero__wave-container {
+        width: 90vw;
+        height: 90vw;
+        margin: 10px 0;
+      }
+
+      .problem__content {
+        padding: 60px 24px;
+      }
+
+      .problem__headline {
+        margin-bottom: 36px;
+      }
+
+      .problem__body {
+        margin-bottom: 48px;
+      }
+
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ==========================================
+       Fixed Background Stage
+       Viewport-level layer: terracotta → dark crossfade
+       Stays OUTSIDE scroll-wrapper (fixed, always visible)
+       ========================================== -->
+  <div class="bg-stage">
+    <div class="bg-stage__dark"></div>
+  </div>
+
+  <!-- ==========================================
+       Scroll Wrapper — Cosmos "고정 뷰포트 + 가상 스크롤" 패턴
+       Lenis controls scroll INSIDE this fixed container.
+       html, body { overflow: hidden } blocks native scroll.
+       ========================================== -->
+  <div id="scroll-wrapper">
+    <div id="scroll-content">
+
+      <!-- ==========================================
+           Section 1: Hero — transparent (bg-stage provides color)
+           ========================================== -->
+      <section id="hero" aria-label="히어로">
+
+        <!-- All hero elements in one group — positioned at viewport center -->
+        <div class="hero__group">
+          <h1 class="hero__title">모두의 벗</h1>
+
+          <!-- Wave animation (no device frame, background-like) -->
+          <div class="hero__wave-container">
+            <svg class="hero__wave-svg" viewBox="-200 -200 400 400" xmlns="http://www.w3.org/2000/svg">
+
+              <!-- Expanding wave 1: r 40→180, 6s cycle, opacity 0.7→0 -->
+              <circle cx="0" cy="0" r="40" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.7">
+                <animate attributeName="r" values="40;180" dur="6s" repeatCount="indefinite" begin="0s" />
+                <animate attributeName="opacity" values="0.7;0" dur="6s" repeatCount="indefinite" begin="0s" />
+              </circle>
+
+              <!-- Expanding wave 2: same, 3s offset -->
+              <circle cx="0" cy="0" r="40" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.7">
+                <animate attributeName="r" values="40;180" dur="6s" repeatCount="indefinite" begin="3s" />
+                <animate attributeName="opacity" values="0.7;0" dur="6s" repeatCount="indefinite" begin="3s" />
+              </circle>
+
+              <!-- Breathing middle layer: r 42↔55, 4s, opacity 0.2 -->
+              <circle cx="0" cy="0" r="42" fill="#ffffff" opacity="0.2">
+                <animate attributeName="r" values="42;55;42" dur="4s" repeatCount="indefinite" />
+              </circle>
+
+              <!-- Core wave: r 28↔35, 2s, opacity 0.4 -->
+              <circle cx="0" cy="0" r="28" fill="#ffffff" opacity="0.4">
+                <animate attributeName="r" values="28;35;28" dur="2s" repeatCount="indefinite" />
+              </circle>
+
+              <!-- Trembling core: r 14↔18, 2.4s irregular cycle -->
+              <circle cx="0" cy="0" r="15" fill="#ffffff">
+                <animate attributeName="r" values="14;18;13;17;14" dur="2.4s" repeatCount="indefinite" />
+              </circle>
+
+              <!-- Orbital particles 1: CW 20s (samantha.svg 동일 SMIL) -->
+              <g>
+                <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="20s"
+                  repeatCount="indefinite" />
+                <circle cx="65" cy="0" r="3" fill="#ffffff" opacity="0.9" />
+                <circle cx="-45" cy="45" r="2" fill="#ffffff" opacity="0.5" />
+              </g>
+
+              <!-- Orbital particles 2: CCW 30s (samantha.svg 동일 SMIL) -->
+              <g>
+                <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="30s"
+                  repeatCount="indefinite" />
+                <circle cx="85" cy="25" r="2.5" fill="#ffffff" opacity="0.6" />
+                <circle cx="-60" cy="-35" r="1.5" fill="#ffffff" opacity="0.8" />
+              </g>
+
+            </svg>
+          </div>
+
+          <p class="hero__desc">한국, 일본 시니어를 위한 AI 보이스 동반자</p>
+        </div>
+
+      </section>
+
+      <!-- ==========================================
+           Section 2: Problem — transparent (bg-stage provides color)
+           ========================================== -->
+      <section id="problem-1" aria-label="문제 1">
+        <div class="problem__content">
+          <p class="problem__headline">1,000만 어르신이 혼자입니다.</p>
+          <p class="problem__body">시니어 인구 한국 1,084만, 일본 3,625만.</p>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Section 3: Problem #2
+           ========================================== -->
+      <section id="problem-2" aria-label="문제 2">
+        <div class="problem__content">
+          <h2 class="problem__headline">아침 일찍 일어나 하루를 바쁘게 보내도,<br>내내 적적한 마음은 가시지 않습니다.</h2>
+          <p class="problem__body">먼저 연락을 하기도, 받기도 어려운 일상</p>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Section 3-1: Solution Intro
+           "만약 누군가 먼저 말을 건다면." — 단독 텍스트, 다크 배경
+           ========================================== -->
+      <section id="solution-intro" aria-label="솔루션 도입">
+        <div class="solution-intro__content">
+          <p class="solution-intro__text">만약 누군가 먼저 말을 걸어준다면,</p>
+          <p class="solution-intro__sub">나를 기억하고, 언제 어디서든 함께한다면</p>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Section 3-2: Solution Demo
+           디바이스 목업 + 대화 시뮬레이션 (whileInView auto-play)
+           ========================================== -->
+      <section id="solution-demo" aria-label="솔루션 데모">
+
+        <!-- 디바이스 목업 (samantha_02.svg 기반 — Step 1-2에서 내부 재구성) -->
+        <div class="demo__device">
+          <div class="demo__btn demo__btn--vol-up"></div>
+          <div class="demo__btn demo__btn--vol-down"></div>
+          <div class="demo__btn demo__btn--power"></div>
+          <div class="demo__device-frame">
+            <div class="demo__device-screen">
+
+              <!-- Layer 1: 홈 화면 (초기 표시, Step 1-3에서 fade out) -->
+              <div class="demo__homescreen">
+                <span class="demo__home-clock">09:25</span>
+                <span class="demo__home-date">10월 12일 목요일</span>
+                <span class="demo__home-appname">Digital Garden</span>
+              </div>
+
+              <!-- Layer 2: 앱 확장 원 (Step 1-3에서 scale 확대) -->
+              <div class="demo__app-circle"></div>
+
+              <!-- Layer 3: 사만다 UI (Step 1-3에서 fade in) -->
+              <div class="demo__samantha-ui">
+                <div class="demo__wave-area">
+                  <svg class="demo__wave" viewBox="-200 -200 400 400" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="0" cy="0" r="40" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.7">
+                      <animate attributeName="r" values="40;180" dur="6s" repeatCount="indefinite" begin="0s" />
+                      <animate attributeName="opacity" values="0.7;0" dur="6s" repeatCount="indefinite" begin="0s" />
+                    </circle>
+                    <circle cx="0" cy="0" r="40" fill="none" stroke="#ffffff" stroke-width="1.5" opacity="0.7">
+                      <animate attributeName="r" values="40;180" dur="6s" repeatCount="indefinite" begin="3s" />
+                      <animate attributeName="opacity" values="0.7;0" dur="6s" repeatCount="indefinite" begin="3s" />
+                    </circle>
+                    <circle cx="0" cy="0" r="42" fill="#ffffff" opacity="0.2">
+                      <animate attributeName="r" values="42;55;42" dur="4s" repeatCount="indefinite" />
+                    </circle>
+                    <circle cx="0" cy="0" r="28" fill="#ffffff" opacity="0.4">
+                      <animate attributeName="r" values="28;35;28" dur="2s" repeatCount="indefinite" />
+                    </circle>
+                    <circle cx="0" cy="0" r="15" fill="#ffffff">
+                      <animate attributeName="r" values="14;18;13;17;14" dur="2.4s" repeatCount="indefinite" />
+                    </circle>
+                    <g>
+                      <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="20s"
+                        repeatCount="indefinite" />
+                      <circle cx="65" cy="0" r="3" fill="#ffffff" opacity="0.9" />
+                      <circle cx="-45" cy="45" r="2" fill="#ffffff" opacity="0.5" />
+                    </g>
+                    <g>
+                      <animateTransform attributeName="transform" type="rotate" from="360" to="0" dur="30s"
+                        repeatCount="indefinite" />
+                      <circle cx="85" cy="25" r="2.5" fill="#ffffff" opacity="0.6" />
+                      <circle cx="-60" cy="-35" r="1.5" fill="#ffffff" opacity="0.8" />
+                    </g>
+                  </svg>
+                </div>
+                <p class="demo__brand">모두의 벗</p>
+                <p class="demo__status">대화 중...</p>
+              </div>
+
+              <!-- 고정 UI (항상 표시) -->
+              <div class="demo__topbar">
+                <span class="demo__time">09:25</span>
+                <div class="demo__notch">
+                  <div class="demo__camera"></div>
+                </div>
+                <div class="demo__indicators">
+                  <span class="demo__signal-dot" style="opacity:0.4"></span>
+                  <span class="demo__signal-dot" style="opacity:0.7"></span>
+                  <span class="demo__signal-dot"></span>
+                  <svg class="demo__battery-icon" viewBox="0 0 28 14" width="22" height="11" fill="none"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <rect x="0" y="0" width="22" height="11" rx="3" stroke="#fff" stroke-width="1.2" opacity="0.9" />
+                    <rect x="2" y="2" width="14" height="7" rx="1.5" fill="#fff" />
+                    <path d="M24 3.5V7.5" stroke="#fff" stroke-width="1.5" stroke-linecap="round" opacity="0.9" />
+                  </svg>
+                </div>
+              </div>
+              <div class="demo__home-indicator"></div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- 방사형 대화 스니펫 (Step 1-4에서 존별 배치 + 순환 애니메이션) -->
+        <div class="demo__snippets">
+          <div class="demo__snippet" data-zone="1">오늘 날씨가 꽤 쌀쌀하네요.<br>외출 계획 있으세요?</div>
+          <div class="demo__snippet" data-zone="2">오늘 병원 가시는 날이죠?</div>
+          <div class="demo__snippet" data-zone="3">점심은 드셨어요?</div>
+          <div class="demo__snippet" data-zone="4">무릎은 좀 나아지셨어요?<br>저번에 많이 아프셨잖아요.</div>
+          <div class="demo__snippet" data-zone="5">손주 시험 잘 봤다면서요?</div>
+          <div class="demo__snippet" data-zone="6">지난번에 좋아하신다던<br>그 노래, 찾아뒀어요.</div>
+          <div class="demo__snippet" data-zone="7">요즘 기운이 없어 보이세요.<br>무슨 일 있으신 건 아니죠?</div>
+          <div class="demo__snippet" data-zone="8">그럴 수 있어요.<br>너무 속상해 마세요.</div>
+          <div class="demo__snippet" data-zone="9">오후 2시쯤에는<br>좀 따뜻해질 거예요.</div>
+          <div class="demo__snippet" data-zone="10">내일 비 온대요.<br>빨래는 오늘 하시는 게 좋겠어요.</div>
+        </div>
+
+      </section>
+
+    </div><!-- #scroll-content -->
+  </div><!-- #scroll-wrapper -->
+
+  <!-- ==========================================
+       GSAP Scripts
+       ========================================== -->
+  <script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    // ── GSAP 3 overwrite 전역 설정 ──
+    // GSAP 3 기본값 overwrite:false → 동일 요소에 새 트윈 생성 시 기존 트윈이 살아남아
+    // gsap.set() 값을 다음 프레임에 덮어씀 → 섹션 전환 시 잔상(flash) 발생.
+    // overwrite:'auto'로 설정하면 동일 프로퍼티 대상 새 트윈이 기존 트윈을 자동 제거.
+    // 현재 + 미래 모든 섹션에 적용됨.
+    gsap.defaults({ overwrite: 'auto' });
+
+    // Reduced motion check
+    var prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // ── Lenis smooth scroll — wrapper 모드 (cosmos.so 동일 아키텍처) ──
+    // cosmos.so 실제 프로덕션 코드에서 검증:
+    //   new Lenis({ wrapper: g.current, content: g.current.firstElementChild,
+    //               lerp: .1, wheelMultiplier: 1, touchMultiplier: 2 })
+    //   html, body { overflow: hidden } → 네이티브 스크롤 완전 차단
+    //   fixed 컨테이너(100dvh, overflow-y:auto)가 유일한 스크롤 영역
+    var wrapper = document.getElementById('scroll-wrapper');
+    var content = document.getElementById('scroll-content');
+
+    var lenis = new Lenis({
+      wrapper: wrapper,
+      content: content,
+      lerp: 0.1,
+      wheelMultiplier: 1,
+      touchMultiplier: 2
+    });
+
+    // ScrollTrigger ↔ Lenis 동기화
+    // Lenis wrapper 모드에서는 wrapper.scrollTop을 직접 설정하므로
+    // ScrollTrigger가 scroller:wrapper를 통해 네이티브로 읽음.
+    // scrollerProxy 불필요 — cosmos도 Framer Motion이 container.scrollTop을 직접 읽음.
+    lenis.on('scroll', ScrollTrigger.update);
+
+    gsap.ticker.add(function (time) {
+      lenis.raf(time * 1000);
+    });
+    gsap.ticker.lagSmoothing(0);
+
+    // ── Section Snap System (cosmos 패턴 — 2계층 잠금) ──
+    // cosmos.so 정밀 분석 결과 (2026-03-16):
+    //   Layer 1 — 하드 블록: scrollTo 애니메이션 중 모든 wheel preventDefault
+    //   Layer 2 — 소프트 블록: 애니메이션 완료 후 150ms 버퍼 + 800ms 쿨다운
+    //   합계 ~1,783ms 동안 재스냅 불가. 큐잉 없음 — 잔여 입력 전부 폐기.
+    //   scrollTo duration: 0.8s, cooldown: 800ms, buffer: 150ms
+    var sectionSnap = {
+      isAnimating: false,    // 하드 블록: scrollTo 진행 중 (wheel preventDefault)
+      isCoolingDown: false,  // 소프트 블록: 스크롤은 허용하되 스냅 차단
+      wheelAccum: 0,
+      wheelTimer: null,
+      threshold: 150,        // 누적 delta 임계값 (cosmos: 100~200 사이)
+      perEventMin: 50,       // 이 미만의 deltaY는 누적 제외 (스크롤바 보호)
+      cooldownMs: 800,       // 스냅 완료 후 다음 스냅까지 대기 (cosmos: 800ms)
+      bufferMs: 150,         // 잔여 이벤트 흡수 버퍼 (cosmos: 150ms)
+      scrollReady: false,
+      getSectionTops: function () {
+        var sections = content.querySelectorAll('section');
+        var tops = [];
+        sections.forEach(function (s) {
+          tops.push(s.offsetTop);
+        });
+        return tops;
+      },
+
+      getCurrentSection: function () {
+        var scroll = wrapper.scrollTop;
+        var tops = this.getSectionTops();
+        var current = 0;
+        for (var i = tops.length - 1; i >= 0; i--) {
+          if (scroll >= tops[i] - 50) { current = i; break; }
+        }
+        return current;
+      },
+
+      snapTo: function (sectionIndex) {
+        var tops = this.getSectionTops();
+        if (sectionIndex < 0) sectionIndex = 0;
+        if (sectionIndex >= tops.length) sectionIndex = tops.length - 1;
+
+        var self = this;
+        self.isAnimating = true;
+        self.isCoolingDown = true;
+
+        lenis.scrollTo(tops[sectionIndex], {
+          duration: 0.8,       // cosmos: 0.8s
+          easing: function (t) { return 1 - Math.pow(1 - t, 3); },
+          onComplete: function () {
+            // 150ms 버퍼: 애니메이션 중 브라우저에 큐잉된 유령 wheel 이벤트 흡수
+            setTimeout(function () {
+              self.isAnimating = false;
+              self.wheelAccum = 0;  // 큐잉된 입력 전부 폐기 (cosmos 동일)
+              // 800ms 쿨다운: 스크롤은 되지만 스냅 불가
+              setTimeout(function () {
+                self.isCoolingDown = false;
+              }, self.cooldownMs);
+            }, self.bufferMs);
+          }
+        });
+      }
+    };
+
+    // 휠 이벤트 인터셉터 (capture phase → Lenis보다 먼저 실행)
+    wrapper.addEventListener('wheel', function (e) {
+      if (!sectionSnap.scrollReady) return;
+
+      var delta = e.deltaY;
+
+      // Layer 1 — 하드 블록: 스냅 애니메이션 + 버퍼 중 → 모든 입력 차단, 폐기
+      if (sectionSnap.isAnimating) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        return;  // 큐잉하지 않음 — cosmos 동일
+      }
+
+      // Layer 2 — 소프트 블록: 쿨다운 중 → wheel 차단 (Lenis 자유 스크롤 방지)
+      if (sectionSnap.isCoolingDown) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        return;
+      }
+
+      // 미세 delta (스크롤바, 정밀 트랙패드) → Lenis에 위임
+      if (Math.abs(delta) < sectionSnap.perEventMin) return;
+
+      // 누적 delta 추적
+      sectionSnap.wheelAccum += delta;
+
+      if (sectionSnap.wheelTimer) clearTimeout(sectionSnap.wheelTimer);
+      sectionSnap.wheelTimer = setTimeout(function () {
+        sectionSnap.wheelAccum = 0;
+      }, 300);
+
+      // 임계값 도달 → 섹션 점프
+      if (Math.abs(sectionSnap.wheelAccum) >= sectionSnap.threshold) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        var direction = sectionSnap.wheelAccum > 0 ? 1 : -1;
+        sectionSnap.wheelAccum = 0;
+        clearTimeout(sectionSnap.wheelTimer);
+        sectionSnap.snapTo(sectionSnap.getCurrentSection() + direction);
+      }
+    }, { passive: false, capture: true });
+
+    // ── Cosmos-style word stagger 유틸 ──
+    // cosmos.so "They were built to keep you scrolling" 실제 구현:
+    //   각 단어 = motion.span, opacity:0 y:30 blur(6px) → visible
+    //   stagger 0.12s/word, duration 1s, ease cubic-bezier(0.22,1,0.36,1)
+    function wrapWords(selector) {
+      var el = document.querySelector(selector);
+      if (!el) return;
+      var words = el.textContent.trim().split(/\s+/);
+      el.innerHTML = words.map(function (w) {
+        return '<span class="word">' + w + '</span>';
+      }).join(' ');
+    }
+
+    function animateWords(selector, baseDelay) {
+      var words = document.querySelectorAll(selector + ' .word');
+      gsap.killTweensOf(words);
+      words.forEach(function (word, i) {
+        gsap.fromTo(word,
+          { opacity: 0, y: 30, filter: 'blur(6px)' },
+          {
+            opacity: 1, y: 0, filter: 'blur(0px)',
+            duration: 1.0,
+            delay: (baseDelay || 0) + i * 0.12,
+            ease: 'power3.out'
+          }
+        );
+      });
+    }
+
+    function resetWords(selector) {
+      var words = document.querySelectorAll(selector + ' .word');
+      gsap.killTweensOf(words);
+      gsap.set(words, { opacity: 0, y: 30, filter: 'blur(6px)' });
+    }
+
+    // 단어 래핑 (애니메이션 설정 전 실행)
+    wrapWords('#problem-2 .problem__body');
+    wrapWords('.solution-intro__sub');
+
+    if (prefersReducedMotion) {
+      // Show everything immediately — no animations
+      gsap.set('.hero__title', { opacity: 1, scale: 1 });
+      gsap.set('.hero__desc', { opacity: 1, letterSpacing: '0.08em' });
+      gsap.set('.hero__wave-container', { opacity: 1 });
+      gsap.set('.bg-stage__dark', { opacity: 0 });
+      gsap.set('#problem-1 .problem__body', { opacity: 1 });
+      gsap.set('#problem-2 .problem__headline', { opacity: 1 });
+      gsap.set('#problem-2 .problem__body .word', { opacity: 1, y: 0, filter: 'none' });
+      gsap.set('.solution-intro__text', { opacity: 1 });
+      gsap.set('.solution-intro__sub .word', { opacity: 1, y: 0, filter: 'none' });
+      gsap.set('.demo__snippet', { opacity: 1 });
+      // 앱 실행 시퀀스 스킵 — 사만다 UI 즉시 표시
+      gsap.set('.demo__homescreen', { opacity: 0 });
+      gsap.set('.demo__app-circle', { scale: 15 });
+      gsap.set('.demo__samantha-ui', { opacity: 1 });
+      // Pause SVG animate + animateTransform elements
+      document.querySelectorAll('animate, animateTransform').forEach(function (el) {
+        el.setAttribute('dur', 'indefinite');
+      });
+      // Normal flow — Lenis stays active for natural scrolling
+      sectionSnap.scrollReady = true;
+    } else {
+      // Block scroll during hero load sequence
+      lenis.stop();
+
+      // ── Hero load sequence (time-based) ──
+      var heroTL = gsap.timeline({ delay: 0.3 });
+
+      // 1. Title: scale 0.97→1.0 + opacity materialize
+      heroTL.fromTo('.hero__title',
+        { opacity: 0, scale: 0.97, y: 20 },
+        { opacity: 1, scale: 1, y: 0, duration: 1.2, ease: 'power2.out' }
+      );
+
+      // 2. Description: letter-spacing wide→narrow
+      heroTL.fromTo('.hero__desc',
+        { opacity: 0, letterSpacing: '0.35em' },
+        { opacity: 1, letterSpacing: '0.08em', duration: 1.0, ease: 'power3.out' },
+        0.9
+      );
+
+      // 3. Wave materialize
+      heroTL.fromTo('.hero__wave-container',
+        { opacity: 0, scale: 0.9 },
+        { opacity: 1, scale: 1, duration: 1.5, ease: 'power1.inOut' },
+        0.9
+      );
+
+      // Enable scroll + setup scroll animations after hero load completes
+      heroTL.eventCallback('onComplete', function () {
+        lenis.start();
+        sectionSnap.scrollReady = true;
+        setupScrollAnimations();
+      });
+    }
+
+    // ── Scroll-driven animations (cosmos 패턴) ──
+    // cosmos.so 검증: scroll-driven 애니메이션은 hero exit + bg transition만.
+    // S2 텍스트는 opacity 항상 1.0, 자연 스크롤로 뷰포트 아래에서 진입.
+    //
+    // 스냅 시 lenis.scrollTo(810)가 호출되면:
+    //   0→350px: hero 퇴장 (opacity+translateY)
+    //   120→450px: bg terracotta→dark
+    //   ~400px+: S2 콘텐츠가 뷰포트 하단에서 자연 진입 (scroll-driven 아님)
+    //   810px: S2 콘텐츠 뷰포트 중앙 정위치
+
+    // ── 앱 실행 시퀀스 타임라인 ──
+    // samantha_02.svg SMIL 타이밍 정밀 재현 (calcMode="linear" → ease:'none'):
+    //   0~1.2s  대기 (홈화면 표시)
+    //   1.2s    홈화면 fade out (0.3s) + 원 탭 수축 45→40 (0.3s)
+    //   1.5s    원 확장 40→FullScreen (1.2s)
+    //   2.7s    사만다 UI fade in (0.6s)
+    //   3.3s    완료
+    // fromTo + immediateRender:false → 재진입 시 시작값 보장, overwrite:'auto'와 충돌 방지
+    function buildAppLaunchTimeline() {
+      var tl = gsap.timeline({ paused: true });
+
+      // Phase 1: 홈화면 fade out (t=1.2s, 0.3s) — SVG linear
+      tl.fromTo('.demo__homescreen',
+        { opacity: 1 },
+        { opacity: 0, duration: 0.3, ease: 'none', immediateRender: false },
+        1.2);
+
+      // Phase 2: 원 탭 수축 — SVG r=45→40 → scale 0.889 (t=1.2s, 0.3s) — SVG linear
+      tl.fromTo('.demo__app-circle',
+        { scale: 1 },
+        { scale: 0.889, duration: 0.3, ease: 'none', immediateRender: false },
+        1.2);
+
+      // Phase 3: 원 전체 확장 — SVG r=40→600 → scale 15 (t=1.5s, 1.2s) — SVG linear
+      tl.fromTo('.demo__app-circle',
+        { scale: 0.889 },
+        { scale: 15, duration: 1.2, ease: 'none', immediateRender: false },
+        1.5);
+
+      // Phase 4: 사만다 UI fade in (t=2.7s, 0.6s) — SVG linear
+      tl.fromTo('.demo__samantha-ui',
+        { opacity: 0 },
+        { opacity: 1, duration: 0.6, ease: 'none', immediateRender: false },
+        2.7);
+
+      return tl;
+    }
+
+    // ── 스크롤 연동 애니메이션 설정 ──
+    // 히어로 로드 완료 후 호출. 각 섹션의 scrub 퇴장 + whileInView 등장 등록.
+    function setupScrollAnimations() {
+
+      // ── Hero content exit ──
+      // cosmos: scroll [80, 350] — opacity 1→0, translateY 0→-80px
+      gsap.fromTo('.hero__group',
+        { opacity: 1, y: 0 },
+        {
+          opacity: 0, y: -80, ease: 'none',
+          scrollTrigger: {
+            trigger: '#hero',
+            scroller: wrapper,
+            start: '80px top',
+            end: '350px top',
+            scrub: true
+          }
+        }
+      );
+
+      // ── Viewport background transition ──
+      // cosmos: scroll [120, 450] — terracotta → dark (330px 구간)
+      gsap.to('.bg-stage__dark', {
+        opacity: 1, ease: 'none',
+        scrollTrigger: {
+          trigger: '#hero',
+          scroller: wrapper,
+          start: '120px top',
+          end: '450px top',
+          scrub: true
+        }
+      });
+
+      // ── 중앙 앵커 비대칭 전환 — 섹션 퇴장 scrub ──
+      // 패턴: 섹션이 스크롤로 빠져나갈 때 콘텐츠가 opacity+translateY(-80px) 위로 사라짐.
+      // 등장은 각 섹션의 whileInView가 담당 (opacity fade in at center).
+      // hero exit (위)과 동일 원리, 후속 섹션에 범용 적용.
+      ['#problem-1 .problem__content',
+        '#problem-2 .problem__content',
+        '#solution-intro .solution-intro__content'].forEach(function (selector) {
+          gsap.fromTo(selector,
+            { opacity: 1, y: 0 },
+            {
+              opacity: 0, y: -80, ease: 'none',
+              scrollTrigger: {
+                trigger: selector,
+                scroller: wrapper,
+                start: 'center 40%',
+                end: 'center 10%',
+                scrub: true
+              }
+            });
+        });
+
+      // ── problem-1 body: whileInView (blur→clear) ──
+      // 양방향: onEnter + onEnterBack 모두 등장 연출 재생 (cosmos 동일)
+      ScrollTrigger.create({
+        trigger: '#problem-1 .problem__content',
+        scroller: wrapper,
+        start: 'top 80%',
+        onEnter: function () {
+          gsap.fromTo('#problem-1 .problem__body',
+            { opacity: 0, filter: 'blur(6px)' },
+            { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out', delay: 0.5 }
+          );
+        },
+        onEnterBack: function () {
+          gsap.fromTo('#problem-1 .problem__body',
+            { opacity: 0, filter: 'blur(6px)' },
+            { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out', delay: 0.5 }
+          );
+        },
+        onLeave: function () {
+          gsap.set('#problem-1 .problem__body', { opacity: 0, filter: 'blur(6px)' });
+        },
+        onLeaveBack: function () {
+          gsap.set('#problem-1 .problem__body', { opacity: 0, filter: 'blur(6px)' });
+        }
+      });
+
+      // ── problem-2: whileInView (보조 blur + 메인 word stagger) ──
+      // cosmos.so 섹션 4 패턴: 단어별 blur(6px)+y(30)+opacity, stagger 0.12s
+      ScrollTrigger.create({
+        trigger: '#problem-2 .problem__content',
+        scroller: wrapper,
+        start: 'top 80%',
+        onEnter: function () {
+          gsap.fromTo('#problem-2 .problem__headline',
+            { opacity: 0, filter: 'blur(6px)' },
+            { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out' }
+          );
+          animateWords('#problem-2 .problem__body', 0.6);
+        },
+        onEnterBack: function () {
+          gsap.fromTo('#problem-2 .problem__headline',
+            { opacity: 0, filter: 'blur(6px)' },
+            { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out' }
+          );
+          animateWords('#problem-2 .problem__body', 0.6);
+        },
+        onLeave: function () {
+          gsap.set('#problem-2 .problem__headline', { opacity: 0, filter: 'blur(6px)' });
+          resetWords('#problem-2 .problem__body');
+        },
+        onLeaveBack: function () {
+          gsap.set('#problem-2 .problem__headline', { opacity: 0, filter: 'blur(6px)' });
+          resetWords('#problem-2 .problem__body');
+        }
+      });
+
+      // ── solution-intro: whileInView (보조 blur + 메인 word stagger) ──
+      ScrollTrigger.create({
+        trigger: '.solution-intro__content',
+        scroller: wrapper,
+        start: 'top 80%',
+        onEnter: function () {
+          gsap.fromTo('.solution-intro__text',
+            { opacity: 0, filter: 'blur(8px)' },
+            { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out' }
+          );
+          animateWords('.solution-intro__sub', 0.5);
+        },
+        onEnterBack: function () {
+          gsap.fromTo('.solution-intro__text',
+            { opacity: 0, filter: 'blur(8px)' },
+            { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out' }
+          );
+          animateWords('.solution-intro__sub', 0.5);
+        },
+        onLeave: function () {
+          gsap.set('.solution-intro__text', { opacity: 0, filter: 'blur(8px)' });
+          resetWords('.solution-intro__sub');
+        },
+        onLeaveBack: function () {
+          gsap.set('.solution-intro__text', { opacity: 0, filter: 'blur(8px)' });
+          resetWords('.solution-intro__sub');
+        }
+      });
+
+      // ── solution-demo: 앱 실행 시퀀스 (whileInView) ──
+      // 무상태 방식: 매 진입마다 timeline kill → 새로 생성 → play
+      // pause/restart/invalidate 조합의 overwrite:'auto' 충돌을 원천 차단
+      var demoTL = null;
+
+      function resetDemoState() {
+        if (demoTL) {
+          demoTL.kill();
+          demoTL = null;
+        }
+        gsap.killTweensOf('.demo__homescreen');
+        gsap.killTweensOf('.demo__app-circle');
+        gsap.killTweensOf('.demo__samantha-ui');
+        gsap.set('.demo__homescreen', { opacity: 1 });
+        gsap.set('.demo__app-circle', { scale: 1 });
+        gsap.set('.demo__samantha-ui', { opacity: 0 });
+      }
+
+      ScrollTrigger.create({
+        trigger: '#solution-demo',
+        scroller: wrapper,
+        start: 'top 80%',
+        onEnter: function () {
+          resetDemoState();
+          demoTL = buildAppLaunchTimeline();
+          demoTL.play();
+        },
+        onEnterBack: function () {
+          resetDemoState();
+          demoTL = buildAppLaunchTimeline();
+          demoTL.play();
+        },
+        onLeave: function () {
+          resetDemoState();
+        },
+        onLeaveBack: function () {
+          resetDemoState();
+        }
+      });
+    }
+  </script>
+
+</body>
+
+</html>
