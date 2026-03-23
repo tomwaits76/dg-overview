@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>모두의 벗 — AI 보이스 동반자 서비스</title>
+  <title>모두의 벗 - 어르신들의 AI 동반자</title>
   <meta name="description" content="한국, 일본 시니어를 위한 AI 보이스 동반자">
 
   <!-- OG Tags -->
@@ -1112,7 +1112,7 @@
           {
             opacity: 1, y: 0, filter: 'blur(0px)',
             duration: 1.0,
-            delay: (baseDelay || 0) + i * 0.12,
+            delay: (baseDelay || 0) + i * 0.2,
             ease: 'power3.out'
           }
         );
@@ -1357,14 +1357,14 @@
             { opacity: 0, filter: 'blur(8px)' },
             { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out' }
           );
-          animateWords('.solution-intro__sub', 0.5);
+          animateWords('.solution-intro__sub', 0.7);
         },
         onEnterBack: function () {
           gsap.fromTo('.solution-intro__text',
             { opacity: 0, filter: 'blur(8px)' },
             { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out' }
           );
-          animateWords('.solution-intro__sub', 0.5);
+          animateWords('.solution-intro__sub', 0.7);
         },
         onLeave: function () {
           gsap.set('.solution-intro__text', { opacity: 0, filter: 'blur(8px)' });
