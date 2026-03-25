@@ -667,14 +667,277 @@
       opacity: 0;
       font-family: var(--font-serif);
       font-weight: 300;
-      font-size: clamp(13px, 1.2vw, 16px);
+      font-size: 15px;
       color: var(--white);
       line-height: 1.6;
       max-width: 220px;
-      padding: 12px 16px;
+      padding: 12px 18px;
       background: rgba(255, 255, 255, 0.06);
-      border-radius: 12px;
+      border-radius: 14px;
       pointer-events: none;
+      backface-visibility: hidden;
+    }
+
+    /* ── 13존 방사형 배치 — Cosmos S3 비대칭 분포 ──
+       상단 5존(①~⑤): 섹션 % 고정
+       중단 4존(⑥~⑨): 디바이스 에지 추적 (JS → CSS 변수)
+       하단 4존(⑩~⑬): 섹션 % 고정 */
+    .demo__snippet[data-zone="1"]  { left: 3%;  top: 14%; }
+    .demo__snippet[data-zone="2"]  { left: 20%; top: 6%; }
+    .demo__snippet[data-zone="3"]  { left: 50%; top: 4%; transform: translateX(-50%); }
+    .demo__snippet[data-zone="4"]  { right: 18%; top: 8%; }
+    .demo__snippet[data-zone="5"]  { right: 2%;  top: 16%; }
+    .demo__snippet[data-zone="6"]  { left: var(--dev-edge-l, 30%); top: 33%; transform: translateX(calc(-100% - 30px)); }
+    .demo__snippet[data-zone="7"]  { left: var(--dev-edge-r, 70%); top: 28%; transform: translateX(30px); }
+    .demo__snippet[data-zone="8"]  { left: var(--dev-edge-l, 30%); top: 58%; transform: translateX(calc(-100% - 30px)); }
+    .demo__snippet[data-zone="9"]  { left: var(--dev-edge-r, 70%); top: 62%; transform: translateX(30px); }
+    .demo__snippet[data-zone="10"] { left: 5%;  bottom: 20%; }
+    .demo__snippet[data-zone="11"] { left: 24%; bottom: 10%; }
+    .demo__snippet[data-zone="12"] { right: 20%; bottom: 16%; }
+    .demo__snippet[data-zone="13"] { right: 3%;  bottom: 6%; }
+
+    /* ============================================
+       Section 6: Solution Bridge — 3열 인포그래픽
+       ============================================ */
+    #solution-bridge {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100dvh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+    }
+
+    .bridge__content {
+      position: relative;
+      z-index: 2;
+      max-width: 1100px;
+      width: 100%;
+      padding: 80px 40px;
+    }
+
+    .bridge__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 60px;
+    }
+
+    .bridge__column {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      opacity: 0;
+    }
+
+    .bridge__icon {
+      width: clamp(120px, 14vw, 180px);
+      height: clamp(120px, 14vw, 180px);
+      margin-bottom: 32px;
+    }
+
+    .bridge__icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .bridge__title {
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: clamp(18px, 2vw, 22px);
+      color: var(--white);
+      margin-bottom: 14px;
+      letter-spacing: 0.01em;
+    }
+
+    .bridge__desc {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: clamp(14px, 1.4vw, 16px);
+      color: var(--text-on-dark-sub);
+      line-height: 1.7;
+    }
+
+    /* ============================================
+       Section 7: Kick
+       ============================================ */
+    #kick {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100dvh;
+      min-height: 600px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+    }
+
+    .kick__content {
+      position: relative;
+      z-index: 2;
+      max-width: 800px;
+      width: 100%;
+      padding: 80px 40px;
+      text-align: center;
+    }
+
+    .kick__text {
+      font-family: var(--font-sans);
+      font-weight: 400;
+      font-size: clamp(18px, 2.5vw, 24px);
+      color: var(--text-on-dark-sub);
+      line-height: 1.7;
+      opacity: 0;
+    }
+
+    .kick__text--second {
+      font-family: var(--font-serif);
+      font-weight: 300;
+      font-size: clamp(28px, 4vw, 48px);
+      color: var(--white);
+      line-height: 1.5;
+      margin-top: 32px;
+    }
+
+    /* ============================================
+       Section 8: Ending
+       ============================================ */
+    #ending {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100dvh;
+      min-height: 700px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: transparent;
+      overflow: hidden;
+    }
+
+    .ending__content {
+      position: relative;
+      z-index: 2;
+      max-width: 500px;
+      width: 100%;
+      padding: 60px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .ending__lead {
+      font-family: var(--font-sans);
+      font-weight: 400;
+      font-size: clamp(16px, 2vw, 20px);
+      color: var(--white);
+      line-height: 1.6;
+      margin-bottom: 36px;
+      opacity: 0;
+    }
+
+    .ending__cta {
+      font-family: var(--font-sans);
+      font-weight: 500;
+      font-size: 16px;
+      color: var(--white);
+      background: rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.4);
+      border-radius: 30px;
+      padding: 14px 40px;
+      cursor: pointer;
+      transition: background 0.3s, border-color 0.3s;
+      margin-bottom: 36px;
+      opacity: 0;
+    }
+
+    .ending__cta:hover {
+      background: rgba(0, 0, 0, 0.2);
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    .ending__form {
+      width: 100%;
+      margin-bottom: 36px;
+    }
+
+    .ending__field {
+      margin-bottom: 16px;
+    }
+
+    .ending__field input,
+    .ending__field textarea {
+      width: 100%;
+      font-family: var(--font-sans);
+      font-weight: 400;
+      font-size: 15px;
+      color: var(--white);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 10px;
+      padding: 14px 18px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .ending__field input:focus,
+    .ending__field textarea:focus {
+      border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .ending__field input::placeholder,
+    .ending__field textarea::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .ending__submit {
+      font-family: var(--font-sans);
+      font-weight: 500;
+      font-size: 16px;
+      color: var(--dark);
+      background: var(--white);
+      border: none;
+      border-radius: 30px;
+      padding: 14px 48px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      margin-top: 8px;
+    }
+
+    .ending__submit:hover {
+      opacity: 0.85;
+    }
+
+    .ending__success p {
+      font-family: var(--font-sans);
+      font-weight: 400;
+      font-size: 18px;
+      color: var(--white);
+      margin-bottom: 48px;
+    }
+
+    .ending__brand {
+      font-family: var(--font-serif);
+      font-weight: 300;
+      font-size: clamp(20px, 2.5vw, 28px);
+      color: var(--white);
+      line-height: 1.6;
+      letter-spacing: 0.03em;
+      margin-bottom: 20px;
+      opacity: 0;
+    }
+
+    .ending__company {
+      font-family: var(--font-sans);
+      font-weight: 400;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.5);
+      opacity: 0;
     }
 
     /* ============================================
@@ -716,6 +979,25 @@
 
       .problem__body {
         margin-bottom: 48px;
+      }
+
+      .demo__snippet {
+        font-size: 13px;
+        padding: 10px 14px;
+        max-width: 180px;
+      }
+
+      .bridge__grid {
+        grid-template-columns: 1fr;
+        gap: 48px;
+      }
+
+      .kick__content {
+        padding: 60px 24px;
+      }
+
+      .ending__content {
+        padding: 40px 24px;
       }
 
     }
@@ -923,20 +1205,132 @@
           </div>
         </div>
 
-        <!-- 방사형 대화 스니펫 (Step 1-4에서 존별 배치 + 순환 애니메이션) -->
+        <!-- 방사형 대화 스니펫 — 13존 Cosmos S3 패턴 -->
         <div class="demo__snippets">
           <div class="demo__snippet" data-zone="1">오늘 날씨가 꽤 쌀쌀하네요.<br>외출 계획 있으세요?</div>
           <div class="demo__snippet" data-zone="2">오늘 병원 가시는 날이죠?</div>
           <div class="demo__snippet" data-zone="3">점심은 드셨어요?</div>
-          <div class="demo__snippet" data-zone="4">무릎은 좀 나아지셨어요?<br>저번에 많이 아프셨잖아요.</div>
-          <div class="demo__snippet" data-zone="5">손주 시험 잘 봤다면서요?</div>
-          <div class="demo__snippet" data-zone="6">지난번에 좋아하신다던<br>그 노래, 찾아뒀어요.</div>
-          <div class="demo__snippet" data-zone="7">요즘 기운이 없어 보이세요.<br>무슨 일 있으신 건 아니죠?</div>
-          <div class="demo__snippet" data-zone="8">그럴 수 있어요.<br>너무 속상해 마세요.</div>
-          <div class="demo__snippet" data-zone="9">오후 2시쯤에는<br>좀 따뜻해질 거예요.</div>
-          <div class="demo__snippet" data-zone="10">내일 비 온대요.<br>빨래는 오늘 하시는 게 좋겠어요.</div>
+          <div class="demo__snippet" data-zone="4">좋아하시는 프로그램 곧 시작해요.</div>
+          <div class="demo__snippet" data-zone="5">무릎은 좀 나아지셨어요?<br>저번에 많이 아프셨잖아요.</div>
+          <div class="demo__snippet" data-zone="6">손주 시험 잘 봤다면서요?</div>
+          <div class="demo__snippet" data-zone="7">지난번에 좋아하신다던<br>그 노래, 찾아뒀어요.</div>
+          <div class="demo__snippet" data-zone="8">요즘 기운이 없어 보이세요.<br>무슨 일 있으신 건 아니죠?</div>
+          <div class="demo__snippet" data-zone="9">그럴 수 있어요.<br>너무 속상해 마세요.</div>
+          <div class="demo__snippet" data-zone="10">오늘따라 목소리가 한결 밝으시네요.</div>
+          <div class="demo__snippet" data-zone="11">오후 2시쯤에는<br>좀 따뜻해질 거예요.</div>
+          <div class="demo__snippet" data-zone="12">내일 비 온대요.<br>빨래는 오늘 하시는 게 좋겠어요.</div>
+          <div class="demo__snippet" data-zone="13">어제 산책은 즐거우셨어요?</div>
         </div>
 
+      </section>
+
+      <!-- ==========================================
+           Section 6: Solution Bridge — 3-column infographic
+           ========================================== -->
+      <section id="solution-bridge" aria-label="기술 브릿지">
+        <div class="bridge__content">
+          <div class="bridge__grid">
+
+            <!-- Column 1: 선제적 대화 — 퍼져나가는 파동 -->
+            <div class="bridge__column">
+              <div class="bridge__icon">
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round">
+                  <!-- 중심에서 퍼지는 동심원 3개 -->
+                  <circle cx="52" cy="60" r="15" opacity="0.9"/>
+                  <circle cx="52" cy="60" r="30" opacity="0.5"/>
+                  <circle cx="52" cy="60" r="45" opacity="0.25"/>
+                  <!-- 시계 문자판 (선제 = 먼저 다가감) -->
+                  <circle cx="90" cy="30" r="12" opacity="0.7"/>
+                  <line x1="90" y1="30" x2="90" y2="22" opacity="0.7"/>
+                  <line x1="90" y1="30" x2="96" y2="33" opacity="0.7"/>
+                </svg>
+              </div>
+              <h3 class="bridge__title">선제적 대화</h3>
+              <p class="bridge__desc">생활 패턴을 학습하여<br>먼저 말을 거는 AI</p>
+            </div>
+
+            <!-- Column 2: 사실적인 맥락 — 연결된 기억층 -->
+            <div class="bridge__column">
+              <div class="bridge__icon">
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round">
+                  <!-- 겹친 원 3개 (수직 오프셋) -->
+                  <circle cx="60" cy="38" r="22" opacity="0.35"/>
+                  <circle cx="60" cy="60" r="22" opacity="0.55"/>
+                  <circle cx="60" cy="82" r="22" opacity="0.8"/>
+                  <!-- 연결선 (점선) -->
+                  <line x1="60" y1="16" x2="60" y2="104" stroke-dasharray="3,5" opacity="0.4"/>
+                </svg>
+              </div>
+              <h3 class="bridge__title">사실적인 맥락</h3>
+              <p class="bridge__desc">현실 정보와 사건까지 담은<br>복합 기억</p>
+            </div>
+
+            <!-- Column 3: 진화하는 관계 — 성장하는 나선 -->
+            <div class="bridge__column">
+              <div class="bridge__icon">
+                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round">
+                  <!-- 안에서 바깥으로 커지는 나선 -->
+                  <path d="M60,60
+                    C60,52 68,48 72,56
+                    C76,64 64,72 56,68
+                    C44,62 48,44 60,40
+                    C76,34 88,52 84,68
+                    C78,90 52,96 40,84
+                    C24,68 32,36 56,28
+                    C80,20 100,48 96,76" opacity="0.7"/>
+                  <!-- 나선 끝에 작은 점 -->
+                  <circle cx="96" cy="76" r="3" fill="#ffffff" stroke="none" opacity="0.6"/>
+                </svg>
+              </div>
+              <h3 class="bridge__title">진화하는 관계</h3>
+              <p class="bridge__desc">대화가 쌓일수록 깊어지는<br>역할, 그리고 관계</p>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Section 7: Kick — emotional pivot
+           ========================================== -->
+      <section id="kick" aria-label="킥">
+        <div class="kick__content">
+          <p class="kick__text">
+            20여년간 게임에서<br>
+            사람이 떠나지 않는 구조를 설계했습니다.
+          </p>
+          <p class="kick__text kick__text--second">
+            이제 그 설계를<br>
+            사회에서 가장 필요한 곳에 씁니다.
+          </p>
+        </div>
+      </section>
+
+      <!-- ==========================================
+           Section 8: Ending — terracotta return + form
+           ========================================== -->
+      <section id="ending" aria-label="엔딩">
+        <div class="ending__content">
+          <p class="ending__lead">모두의 벗이 그리는 앞날이 담긴<br>자료를 보내드립니다.</p>
+          <button class="ending__cta" type="button">연락하기</button>
+          <form class="ending__form" action="https://api.web3forms.com/submit" method="POST" style="display:none;">
+            <input type="hidden" name="access_key" value="1d850091-cf4f-4b1f-b3cf-a31eeefeeacf">
+            <input type="hidden" name="subject" value="[모두의 벗] 새 연락 요청">
+            <input type="hidden" name="from_name" value="모두의 벗 웹사이트">
+            <input type="checkbox" name="botcheck" style="display:none;">
+            <div class="ending__field"><input type="text" name="name" placeholder="이름" required></div>
+            <div class="ending__field"><input type="text" name="organization" placeholder="소속" required></div>
+            <div class="ending__field"><input type="email" name="email" placeholder="이메일" required></div>
+            <div class="ending__field"><input type="tel" name="phone" placeholder="연락처 (선택)"></div>
+            <div class="ending__field"><textarea name="memo" placeholder="메모 (선택)" rows="3"></textarea></div>
+            <button class="ending__submit" type="submit">보내기</button>
+          </form>
+          <div class="ending__success" style="display:none;">
+            <p>감사합니다. 곧 연락드리겠습니다.</p>
+          </div>
+          <p class="ending__brand">모두에게 열려 있지만,<br>당신에게만 깊어지는 벗</p>
+          <p class="ending__company">(주)디지털가든</p>
+        </div>
       </section>
 
     </div><!-- #scroll-content -->
@@ -1230,8 +1624,77 @@
         { opacity: 1, duration: 0.6, ease: 'none', immediateRender: false },
         2.7);
 
+      // ── Phase 5: 스니펫 순환 (t=2.7s~, 무한 루프) ──
+      // 파동 등장(2.7s)과 동시에 첫 스니펫 시작 → 이후 무한 순환
+      // Cosmos S3 패턴: 공간 핑퐁 (대각선 점프, 사분면 분산)
+      // 생애주기: fade-in 1.0s → hold 1.2s → fade-out 0.8s = 3.0s
+      // 동시 표시: 3.0 / 0.85 ≈ 3.5 → 3~4개
+      // 사이클: 13.2s (13개 순환) + 1.0s 호흡 = 14.2s/cycle
+      var snippetTL = gsap.timeline({ repeat: -1, repeatDelay: 1.0 });
+
+      var snippetOrder = [
+        { zone: 3,  t: 0.00 },   // 상단 중앙
+        { zone: 10, t: 0.85 },   // 좌하 원거리
+        { zone: 7,  t: 1.70 },   // 우측 근접
+        { zone: 1,  t: 2.55 },   // 좌상 원거리
+        { zone: 13, t: 3.40 },   // 우하 원거리
+        { zone: 6,  t: 4.25 },   // 좌측 근접
+        { zone: 4,  t: 5.10 },   // 우상 중거리
+        { zone: 11, t: 5.95 },   // 좌하 중거리
+        { zone: 2,  t: 6.80 },   // 좌상 중거리
+        { zone: 9,  t: 7.65 },   // 우측 근접(하)
+        { zone: 5,  t: 8.50 },   // 우상 원거리
+        { zone: 8,  t: 9.35 },   // 좌측 근접(하)
+        { zone: 12, t: 10.20 }   // 우하 중거리
+      ];
+
+      var fadeIn = 1.0;
+      var hold = 1.2;
+      var fadeOut = 0.8;
+
+      snippetOrder.forEach(function(item) {
+        var sel = '.demo__snippet[data-zone="' + item.zone + '"]';
+
+        // 진입: blur + scale + y 복합 (다른 섹션과 차별화)
+        snippetTL.fromTo(sel,
+          { opacity: 0, scale: 0.96, y: 8, filter: 'blur(4px)' },
+          { opacity: 1, scale: 1, y: 0, filter: 'blur(0px)',
+            duration: fadeIn, ease: 'power2.out', immediateRender: false },
+          item.t);
+
+        // 퇴장: 위로 살짝 사라짐 (진입과 비대칭)
+        snippetTL.to(sel,
+          { opacity: 0, scale: 0.96, y: -6, filter: 'blur(3px)',
+            duration: fadeOut, ease: 'power2.in' },
+          item.t + fadeIn + hold);
+      });
+
+      // 파동 fade-in(2.7s)과 동시에 스니펫 루프 시작
+      tl.add(snippetTL, 2.7);
+
       return tl;
     }
+
+    // ── 디바이스 에지 추적 (근접 존 ⑥⑦⑧⑨ 포지셔닝) ──
+    // device.getBoundingClientRect() → 섹션 기준 에지 좌표 → CSS 변수
+    function updateDeviceEdges() {
+      var device = document.querySelector('.demo__device');
+      var section = document.querySelector('#solution-demo');
+      if (!device || !section) return;
+
+      var dRect = device.getBoundingClientRect();
+      var sRect = section.getBoundingClientRect();
+
+      // 섹션 기준 상대 좌표 (% 변환 없이 px로 CSS 변수에 저장)
+      var edgeL = dRect.left - sRect.left;
+      var edgeR = dRect.right - sRect.left;
+
+      section.style.setProperty('--dev-edge-l', edgeL + 'px');
+      section.style.setProperty('--dev-edge-r', edgeR + 'px');
+    }
+
+    updateDeviceEdges();
+    window.addEventListener('resize', updateDeviceEdges);
 
     // ── 스크롤 연동 애니메이션 설정 ──
     // 히어로 로드 완료 후 호출. 각 섹션의 scrub 퇴장 + whileInView 등장 등록.
@@ -1272,7 +1735,9 @@
       // hero exit (위)과 동일 원리, 후속 섹션에 범용 적용.
       ['#problem-1 .problem__content',
         '#problem-2 .problem__content',
-        '#solution-intro .solution-intro__content'].forEach(function (selector) {
+        '#solution-intro .solution-intro__content',
+        '#solution-bridge .bridge__content',
+        '#kick .kick__content'].forEach(function (selector) {
           gsap.fromTo(selector,
             { opacity: 1, y: 0 },
             {
@@ -1386,12 +1851,17 @@
           demoTL.kill();
           demoTL = null;
         }
+        // 앱 실행 요소 리셋
         gsap.killTweensOf('.demo__homescreen');
         gsap.killTweensOf('.demo__app-circle');
         gsap.killTweensOf('.demo__samantha-ui');
         gsap.set('.demo__homescreen', { opacity: 1 });
         gsap.set('.demo__app-circle', { scale: 1 });
         gsap.set('.demo__samantha-ui', { opacity: 0 });
+        // 스니펫 리셋 — 초기 상태(불투명, 살짝 축소, 아래, 블러)로 복원
+        var snippets = document.querySelectorAll('.demo__snippet');
+        gsap.killTweensOf(snippets);
+        gsap.set(snippets, { opacity: 0, scale: 0.96, y: 8, filter: 'blur(4px)' });
       }
 
       ScrollTrigger.create({
@@ -1399,23 +1869,191 @@
         scroller: wrapper,
         start: 'top 80%',
         onEnter: function () {
+          var snips = document.querySelectorAll('.demo__snippet');
+          snips.forEach(function(s) { s.style.willChange = 'transform, opacity, filter'; });
           resetDemoState();
           demoTL = buildAppLaunchTimeline();
           demoTL.play();
         },
         onEnterBack: function () {
+          var snips = document.querySelectorAll('.demo__snippet');
+          snips.forEach(function(s) { s.style.willChange = 'transform, opacity, filter'; });
           resetDemoState();
           demoTL = buildAppLaunchTimeline();
           demoTL.play();
         },
         onLeave: function () {
           resetDemoState();
+          var snips = document.querySelectorAll('.demo__snippet');
+          snips.forEach(function(s) { s.style.willChange = 'auto'; });
         },
         onLeaveBack: function () {
           resetDemoState();
+          var snips = document.querySelectorAll('.demo__snippet');
+          snips.forEach(function(s) { s.style.willChange = 'auto'; });
+        }
+      });
+
+      // ── ending 배경 전환: dark → terracotta (scrub) ──
+      // fromTo 필수: gsap.to는 생성 시점의 computed값(0)을 from으로 캡처하여 역방향 실패
+      gsap.fromTo('.bg-stage__dark',
+        { opacity: 1 },
+        { opacity: 0, ease: 'none', immediateRender: false,
+          scrollTrigger: {
+            trigger: '#ending',
+            scroller: wrapper,
+            start: 'top bottom',
+            end: 'top 50%',
+            scrub: true
+          }
+        }
+      );
+
+      // ── solution-bridge: 파도형 stagger 진입 ──
+      ScrollTrigger.create({
+        trigger: '#solution-bridge',
+        scroller: wrapper,
+        start: 'top 80%',
+        onEnter: function () {
+          var cols = document.querySelectorAll('.bridge__column');
+          var yOffsets = [50, 40, 30];
+          cols.forEach(function(col, i) {
+            gsap.fromTo(col,
+              { opacity: 0, y: yOffsets[i] },
+              { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', delay: i * 0.25 }
+            );
+          });
+        },
+        onEnterBack: function () {
+          var cols = document.querySelectorAll('.bridge__column');
+          var yOffsets = [50, 40, 30];
+          cols.forEach(function(col, i) {
+            gsap.fromTo(col,
+              { opacity: 0, y: yOffsets[i] },
+              { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', delay: i * 0.25 }
+            );
+          });
+        },
+        onLeave: function () {
+          gsap.set('.bridge__column', { opacity: 0, y: 40 });
+        },
+        onLeaveBack: function () {
+          gsap.set('.bridge__column', { opacity: 0, y: 40 });
+        }
+      });
+
+      // ── kick: 극도로 느린 순수 fade (여백이 말하게 한다) ──
+      ScrollTrigger.create({
+        trigger: '#kick',
+        scroller: wrapper,
+        start: 'top 80%',
+        onEnter: function () {
+          gsap.fromTo('.kick__text:not(.kick__text--second)',
+            { opacity: 0 }, { opacity: 1, duration: 2.0, ease: 'power1.out' });
+          gsap.fromTo('.kick__text--second',
+            { opacity: 0 }, { opacity: 1, duration: 2.0, ease: 'power1.out', delay: 1.2 });
+        },
+        onEnterBack: function () {
+          gsap.fromTo('.kick__text:not(.kick__text--second)',
+            { opacity: 0 }, { opacity: 1, duration: 2.0, ease: 'power1.out' });
+          gsap.fromTo('.kick__text--second',
+            { opacity: 0 }, { opacity: 1, duration: 2.0, ease: 'power1.out', delay: 1.2 });
+        },
+        onLeave: function () {
+          gsap.set('.kick__text', { opacity: 0 });
+        },
+        onLeaveBack: function () {
+          gsap.set('.kick__text', { opacity: 0 });
+        }
+      });
+
+      // ── ending: 순차 계단식 진입 ──
+      ScrollTrigger.create({
+        trigger: '#ending',
+        scroller: wrapper,
+        start: 'top 80%',
+        onEnter: function () {
+          gsap.fromTo('.ending__lead',
+            { opacity: 0 }, { opacity: 1, duration: 0.8, ease: 'power1.out' });
+          gsap.fromTo('.ending__cta',
+            { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out', delay: 0.3 });
+          gsap.fromTo('.ending__brand',
+            { opacity: 0 }, { opacity: 1, duration: 1.0, ease: 'power1.out', delay: 0.5 });
+          gsap.fromTo('.ending__company',
+            { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out', delay: 0.7 });
+        },
+        onEnterBack: function () {
+          gsap.fromTo('.ending__lead',
+            { opacity: 0 }, { opacity: 1, duration: 0.8, ease: 'power1.out' });
+          gsap.fromTo('.ending__cta',
+            { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out', delay: 0.3 });
+          gsap.fromTo('.ending__brand',
+            { opacity: 0 }, { opacity: 1, duration: 1.0, ease: 'power1.out', delay: 0.5 });
+          gsap.fromTo('.ending__company',
+            { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out', delay: 0.7 });
+        },
+        onLeave: function () {
+          gsap.set(['.ending__lead', '.ending__cta', '.ending__brand', '.ending__company'], { opacity: 0 });
+        },
+        onLeaveBack: function () {
+          gsap.set(['.ending__lead', '.ending__cta', '.ending__brand', '.ending__company'], { opacity: 0 });
         }
       });
     }
+
+    // ── 폼 인터랙션 ──
+    (function () {
+      var cta = document.querySelector('.ending__cta');
+      var form = document.querySelector('.ending__form');
+      var success = document.querySelector('.ending__success');
+      if (!cta || !form) return;
+
+      // CTA 클릭 → 폼 슬라이드
+      cta.addEventListener('click', function () {
+        cta.style.display = 'none';
+        form.style.display = 'block';
+        gsap.fromTo(form, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
+      });
+
+      // 폼 제출
+      var submitBtn = form.querySelector('.ending__submit');
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        submitBtn.textContent = '보내는 중...';
+        submitBtn.disabled = true;
+
+        fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          body: new FormData(form)
+        })
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
+            console.log('Web3Forms response:', data);
+            if (data.success) {
+              submitBtn.textContent = '보내기 완료';
+              setTimeout(function () {
+                form.style.display = 'none';
+                success.style.display = 'block';
+                gsap.fromTo(success, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out' });
+              }, 800);
+            } else {
+              submitBtn.textContent = '전송 실패';
+              setTimeout(function () {
+                submitBtn.textContent = '보내기';
+                submitBtn.disabled = false;
+              }, 1500);
+            }
+          })
+          .catch(function (err) {
+            console.error('Web3Forms error:', err);
+            submitBtn.textContent = '전송 실패';
+            setTimeout(function () {
+              submitBtn.textContent = '보내기';
+              submitBtn.disabled = false;
+            }, 1500);
+          });
+      });
+    })();
   </script>
 
 </body>
