@@ -2017,8 +2017,11 @@
 
       // 폼 제출
       var submitBtn = form.querySelector('.ending__submit');
+      var submitting = false;
       form.addEventListener('submit', function (e) {
         e.preventDefault();
+        if (submitting) return;
+        submitting = true;
         submitBtn.textContent = '보내는 중...';
         submitBtn.disabled = true;
 
@@ -2028,7 +2031,6 @@
         })
           .then(function (res) { return res.json(); })
           .then(function (data) {
-            console.log('Web3Forms response:', data);
             if (data.success) {
               submitBtn.textContent = '보내기 완료';
               setTimeout(function () {
@@ -2041,16 +2043,18 @@
               setTimeout(function () {
                 submitBtn.textContent = '보내기';
                 submitBtn.disabled = false;
-              }, 1500);
+                submitting = false;
+              }, 3000);
             }
           })
-          .catch(function (err) {
-            console.error('Web3Forms error:', err);
-            submitBtn.textContent = '전송 실패';
+          .catch(function () {
+            // 429 rate limit 응답은 CORS 헤더가 없어 Failed to fetch로 도달
+            submitBtn.textContent = '잠시 후 다시 시도해주세요';
             setTimeout(function () {
               submitBtn.textContent = '보내기';
               submitBtn.disabled = false;
-            }, 1500);
+              submitting = false;
+            }, 10000);
           });
       });
     })();
