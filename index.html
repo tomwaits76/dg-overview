@@ -787,20 +787,15 @@
 
     .kick__text {
       font-family: var(--font-sans);
-      font-weight: 400;
-      font-size: clamp(18px, 2.5vw, 24px);
-      color: var(--text-on-dark-sub);
-      line-height: 1.7;
+      font-weight: 300;
+      font-size: clamp(24px, 3.5vw, 42px);
+      color: var(--white);
+      line-height: 1.5;
       opacity: 0;
     }
 
     .kick__text--second {
-      font-family: var(--font-serif);
-      font-weight: 300;
-      font-size: clamp(28px, 4vw, 48px);
-      color: var(--white);
-      line-height: 1.5;
-      margin-top: 32px;
+      margin-top: 48px;
     }
 
     /* ============================================
@@ -1502,11 +1497,11 @@
       gsap.killTweensOf(words);
       words.forEach(function (word, i) {
         gsap.fromTo(word,
-          { opacity: 0, y: 30, filter: 'blur(6px)' },
+          { opacity: 0, filter: 'blur(6px)' },
           {
-            opacity: 1, y: 0, filter: 'blur(0px)',
-            duration: 1.0,
-            delay: (baseDelay || 0) + i * 0.2,
+            opacity: 1, filter: 'blur(0px)',
+            duration: 0.9,
+            delay: (baseDelay || 0) + i * 0.17,
             ease: 'power3.out'
           }
         );
@@ -1516,7 +1511,7 @@
     function resetWords(selector) {
       var words = document.querySelectorAll(selector + ' .word');
       gsap.killTweensOf(words);
-      gsap.set(words, { opacity: 0, y: 30, filter: 'blur(6px)' });
+      gsap.set(words, { opacity: 0, filter: 'blur(6px)' });
     }
 
     // 단어 래핑 (애니메이션 설정 전 실행)
@@ -1532,7 +1527,7 @@
       gsap.set('#problem-2 .problem__headline', { opacity: 1 });
       gsap.set('#problem-2 .problem__body', { opacity: 1, filter: 'none' });
       gsap.set('.solution-intro__text', { opacity: 1 });
-      gsap.set('.solution-intro__sub .word', { opacity: 1, y: 0, filter: 'none' });
+      gsap.set('.solution-intro__sub .word', { opacity: 1, filter: 'none' });
       gsap.set('.demo__snippet', { opacity: 1 });
       // 앱 실행 시퀀스 스킵 — 사만다 UI 즉시 표시
       gsap.set('.demo__homescreen', { opacity: 0 });
