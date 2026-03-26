@@ -1711,15 +1711,17 @@
         }
       );
 
-      // ── Viewport background transition ──
-      // cosmos: scroll [120, 450] — terracotta → dark (330px 구간)
+      // ── Viewport background transition: terracotta → dark ──
+      // hero=90dvh 보정: problem-1 top이 viewport 90%에 위치하므로
+      // start를 'top 90%'로 맞춰 scrollTop=0에서 정확히 scrub=0 (dark 잔상 없음)
+      // 구간 90%→40% = 50dvh (S7→S8 'top bottom'→'top 50%'와 동일 체감)
       gsap.to('.bg-stage__dark', {
         opacity: 1, ease: 'none',
         scrollTrigger: {
-          trigger: '#hero',
+          trigger: '#problem-1',
           scroller: wrapper,
-          start: '120px top',
-          end: '450px top',
+          start: 'top 90%',
+          end: 'top 40%',
           scrub: true
         }
       });
