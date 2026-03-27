@@ -829,31 +829,28 @@
     .ending__lead {
       font-family: var(--font-sans);
       font-weight: 400;
-      font-size: clamp(16px, 2vw, 20px);
+      font-size: clamp(18px, 2.2vw, 24px);
       color: var(--white);
       line-height: 1.6;
       margin-bottom: 36px;
-      opacity: 0;
     }
 
     .ending__cta {
       font-family: var(--font-sans);
       font-weight: 500;
-      font-size: 16px;
-      color: var(--white);
-      background: rgba(0, 0, 0, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      border-radius: 30px;
-      padding: 14px 40px;
+      font-size: clamp(18px, 2vw, 22px);
+      color: #7A6A62;
+      background: var(--white);
+      border: none;
+      border-radius: 60px;
+      padding: clamp(18px, 2.5vw, 28px) clamp(48px, 7vw, 80px);
       cursor: pointer;
-      transition: background 0.3s, border-color 0.3s;
+      transition: transform 0.3s;
       margin-bottom: 36px;
-      opacity: 0;
     }
 
     .ending__cta:hover {
-      background: rgba(0, 0, 0, 0.2);
-      border-color: rgba(255, 255, 255, 0.6);
+      transform: scale(1.03);
     }
 
     .ending__form {
@@ -890,11 +887,22 @@
       color: rgba(255, 255, 255, 0.4);
     }
 
+    .ending__field input:-webkit-autofill,
+    .ending__field input:-webkit-autofill:hover,
+    .ending__field input:-webkit-autofill:focus,
+    .ending__field input:-webkit-autofill:active {
+      -webkit-text-fill-color: var(--white) !important;
+      -webkit-box-shadow: 0 0 0 9999px #2C2C2E inset !important;
+      box-shadow: 0 0 0 9999px #2C2C2E inset !important;
+      caret-color: var(--white);
+      transition: background-color 9999s ease-in-out 0s;
+    }
+
     .ending__submit {
       font-family: var(--font-sans);
       font-weight: 500;
       font-size: 16px;
-      color: var(--dark);
+      color: #7A6A62;
       background: var(--white);
       border: none;
       border-radius: 30px;
@@ -905,7 +913,12 @@
     }
 
     .ending__submit:hover {
-      opacity: 0.85;
+      transform: scale(1.03);
+    }
+
+    .ending__submit:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
 
     .ending__success p {
@@ -917,22 +930,50 @@
     }
 
     .ending__brand {
+      position: absolute;
+      bottom: 25%;
+      left: 0;
+      width: 100%;
+      z-index: 2;
       font-family: var(--font-serif);
       font-weight: 300;
       font-size: clamp(20px, 2.5vw, 28px);
       color: var(--white);
       line-height: 1.6;
       letter-spacing: 0.03em;
-      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .ending__brand .word {
+      opacity: 0;
+      filter: blur(6px);
+      display: inline-block;
+    }
+
+    .ending__footer {
+      position: absolute;
+      bottom: 32px;
+      left: 40px;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 12px;
       opacity: 0;
     }
 
-    .ending__company {
+    .ending__footer-name {
+      font-family: var(--font-sans);
+      font-weight: 600;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: 0.02em;
+    }
+
+    .ending__footer-copy {
       font-family: var(--font-sans);
       font-weight: 400;
       font-size: 14px;
       color: rgba(255, 255, 255, 0.5);
-      opacity: 0;
     }
 
     /* ============================================
@@ -993,6 +1034,11 @@
 
       .ending__content {
         padding: 40px 24px;
+      }
+
+      .ending__footer {
+        left: 24px;
+        bottom: 24px;
       }
 
     }
@@ -1306,25 +1352,28 @@
            ========================================== -->
       <section id="ending" aria-label="엔딩">
         <div class="ending__content">
-          <p class="ending__lead">모두의 벗이 그리는 앞날이 담긴<br>자료를 보내드립니다.</p>
-          <button class="ending__cta" type="button">연락하기</button>
+          <p class="ending__lead">모두의 벗이 그리는 앞날에 초대합니다.</p>
+          <button class="ending__cta" type="button">소개 자료</button>
           <form class="ending__form" action="https://api.web3forms.com/submit" method="POST" style="display:none;">
             <input type="hidden" name="access_key" value="1d850091-cf4f-4b1f-b3cf-a31eeefeeacf">
             <input type="hidden" name="subject" value="[모두의 벗] 새 연락 요청">
             <input type="hidden" name="from_name" value="모두의 벗 웹사이트">
             <input type="checkbox" name="botcheck" style="display:none;">
-            <div class="ending__field"><input type="text" name="name" placeholder="이름" required></div>
-            <div class="ending__field"><input type="text" name="organization" placeholder="소속" required></div>
-            <div class="ending__field"><input type="email" name="email" placeholder="이메일" required></div>
-            <div class="ending__field"><input type="tel" name="phone" placeholder="연락처 (선택)"></div>
+            <div class="ending__field"><input type="text" name="name" placeholder="이름" required autocomplete="off"></div>
+            <div class="ending__field"><input type="text" name="organization" placeholder="소속" required autocomplete="off"></div>
+            <div class="ending__field"><input type="email" name="email" placeholder="이메일" required autocomplete="off"></div>
+            <div class="ending__field"><input type="tel" name="phone" placeholder="연락처 (선택)" autocomplete="off"></div>
             <div class="ending__field"><textarea name="memo" placeholder="메모 (선택)" rows="3"></textarea></div>
-            <button class="ending__submit" type="submit">보내기</button>
+            <button class="ending__submit" type="submit">요청하기</button>
           </form>
           <div class="ending__success" style="display:none;">
             <p>감사합니다. 곧 연락드리겠습니다.</p>
           </div>
-          <p class="ending__brand">모두에게 열려 있지만,<br>당신에게만 깊어지는 벗</p>
-          <p class="ending__company">(주)디지털가든</p>
+        </div>
+        <p class="ending__brand">모두에게 열려 있지만, 당신에게만 깊어지는 벗</p>
+        <div class="ending__footer">
+          <span class="ending__footer-name">Digital Garden</span>
+          <span class="ending__footer-copy">&copy; 2026</span>
         </div>
       </section>
 
@@ -1516,6 +1565,7 @@
 
     // 단어 래핑 (애니메이션 설정 전 실행)
     wrapWords('.solution-intro__sub');
+    wrapWords('.ending__brand');
 
     if (prefersReducedMotion) {
       // Show everything immediately — no animations
@@ -1529,6 +1579,7 @@
       gsap.set('.solution-intro__text', { opacity: 1 });
       gsap.set('.solution-intro__sub .word', { opacity: 1, filter: 'none' });
       gsap.set('.demo__snippet', { opacity: 1 });
+      gsap.set('.ending__brand .word', { opacity: 1, filter: 'none' });
       // 앱 실행 시퀀스 스킵 — 사만다 UI 즉시 표시
       gsap.set('.demo__homescreen', { opacity: 0 });
       gsap.set('.demo__app-circle', { scale: 15 });
@@ -1964,37 +2015,34 @@
         }
       });
 
-      // ── ending: 순차 계단식 진입 ──
+      // ── ending: lead+CTA는 항상 표시 (S2 headline 패턴) ──
+      function endingEnter() {
+        // brand: S4 word animation — 1초 후 시작, duration 1.4, stagger 0.28
+        resetWords('.ending__brand');
+        var brandWords = document.querySelectorAll('.ending__brand .word');
+        gsap.killTweensOf(brandWords);
+        brandWords.forEach(function (word, i) {
+          gsap.fromTo(word,
+            { opacity: 0, filter: 'blur(6px)' },
+            { opacity: 1, filter: 'blur(0px)',
+              duration: 1.4, delay: 1.0 + i * 0.28, ease: 'power3.out' }
+          );
+        });
+        gsap.fromTo('.ending__footer',
+          { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out', delay: 0.5 });
+      }
+      function endingLeave() {
+        resetWords('.ending__brand');
+        gsap.set('.ending__footer', { opacity: 0 });
+      }
       ScrollTrigger.create({
         trigger: '#ending',
         scroller: wrapper,
         start: 'top 80%',
-        onEnter: function () {
-          gsap.fromTo('.ending__lead',
-            { opacity: 0 }, { opacity: 1, duration: 0.8, ease: 'power1.out' });
-          gsap.fromTo('.ending__cta',
-            { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out', delay: 0.3 });
-          gsap.fromTo('.ending__brand',
-            { opacity: 0 }, { opacity: 1, duration: 1.0, ease: 'power1.out', delay: 0.5 });
-          gsap.fromTo('.ending__company',
-            { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out', delay: 0.7 });
-        },
-        onEnterBack: function () {
-          gsap.fromTo('.ending__lead',
-            { opacity: 0 }, { opacity: 1, duration: 0.8, ease: 'power1.out' });
-          gsap.fromTo('.ending__cta',
-            { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out', delay: 0.3 });
-          gsap.fromTo('.ending__brand',
-            { opacity: 0 }, { opacity: 1, duration: 1.0, ease: 'power1.out', delay: 0.5 });
-          gsap.fromTo('.ending__company',
-            { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out', delay: 0.7 });
-        },
-        onLeave: function () {
-          gsap.set(['.ending__lead', '.ending__cta', '.ending__brand', '.ending__company'], { opacity: 0 });
-        },
-        onLeaveBack: function () {
-          gsap.set(['.ending__lead', '.ending__cta', '.ending__brand', '.ending__company'], { opacity: 0 });
-        }
+        onEnter: endingEnter,
+        onEnterBack: endingEnter,
+        onLeave: endingLeave,
+        onLeaveBack: endingLeave
       });
     }
 
@@ -2019,7 +2067,7 @@
         e.preventDefault();
         if (submitting) return;
         submitting = true;
-        submitBtn.textContent = '보내는 중...';
+        submitBtn.textContent = '전달 중...';
         submitBtn.disabled = true;
 
         fetch('https://api.web3forms.com/submit', {
@@ -2029,16 +2077,16 @@
           .then(function (res) { return res.json(); })
           .then(function (data) {
             if (data.success) {
-              submitBtn.textContent = '보내기 완료';
+              submitBtn.textContent = '요청 완료';
               setTimeout(function () {
                 form.style.display = 'none';
                 success.style.display = 'block';
                 gsap.fromTo(success, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out' });
               }, 800);
             } else {
-              submitBtn.textContent = '전송 실패';
+              submitBtn.textContent = '요청 실패';
               setTimeout(function () {
-                submitBtn.textContent = '보내기';
+                submitBtn.textContent = '요청하기';
                 submitBtn.disabled = false;
                 submitting = false;
               }, 3000);
@@ -2046,9 +2094,9 @@
           })
           .catch(function () {
             // 429 rate limit 응답은 CORS 헤더가 없어 Failed to fetch로 도달
-            submitBtn.textContent = '잠시 후 다시 시도해주세요';
+            submitBtn.textContent = '통신 오류';
             setTimeout(function () {
-              submitBtn.textContent = '보내기';
+              submitBtn.textContent = '요청하기';
               submitBtn.disabled = false;
               submitting = false;
             }, 10000);
