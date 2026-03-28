@@ -785,17 +785,32 @@
       text-align: center;
     }
 
-    .kick__text {
+    .kick__grid {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      opacity: 0;
+      overflow: hidden;
+    }
+
+    /* kick: 보조(sub, 위) + 메인(main, 아래) — S3/S4 위계 */
+    .kick__sub {
       font-family: var(--font-sans);
-      font-weight: 300;
-      font-size: clamp(24px, 3.5vw, 42px);
-      color: var(--white);
-      line-height: 1.5;
+      font-weight: 400;
+      font-size: clamp(18px, 2.5vw, 24px);
+      color: var(--text-on-dark-sub);
+      line-height: 1.7;
+      margin-bottom: 32px;
       opacity: 0;
     }
 
-    .kick__text--second {
-      margin-top: 48px;
+    .kick__main {
+      font-family: var(--font-sans);
+      font-weight: 300;
+      font-size: clamp(28px, 4vw, 48px);
+      color: var(--white);
+      line-height: 1.5;
+      opacity: 0;
     }
 
     /* ============================================
@@ -1335,15 +1350,10 @@
            Section 7: Kick — emotional pivot
            ========================================== -->
       <section id="kick" aria-label="킥">
+        <div class="kick__grid" aria-hidden="true"></div>
         <div class="kick__content">
-          <p class="kick__text">
-            20여년간 게임에서<br>
-            사람이 떠나지 않는 구조를 설계했습니다.
-          </p>
-          <p class="kick__text kick__text--second">
-            이제 그 설계를<br>
-            사회에서 가장 필요한 곳에 씁니다.
-          </p>
+          <p class="kick__sub">사람이 머물고, 돌아오고, 깊어지는 구조.</p>
+          <p class="kick__main">게임이 오랫동안 증명한 그 설계를,<br>지금 여기에 씁니다.</p>
         </div>
       </section>
 
@@ -1440,6 +1450,7 @@
       cooldownMs: 800,       // 스냅 완료 후 다음 스냅까지 대기 (cosmos: 800ms)
       bufferMs: 150,         // 잔여 이벤트 흡수 버퍼 (cosmos: 150ms)
       scrollReady: false,
+      lastSnappedIndex: 0,   // 방안 2: 마지막 스냅 목표 인덱스 추적
       getSectionTops: function () {
         var sections = content.querySelectorAll('section');
         var tops = [];
@@ -1459,6 +1470,11 @@
         return current;
       },
 
+      // lastSnappedIndex를 현재 scrollTop 기준으로 동기화
+      syncIndex: function () {
+        this.lastSnappedIndex = this.getCurrentSection();
+      },
+
       snapTo: function (sectionIndex) {
         var tops = this.getSectionTops();
         if (sectionIndex < 0) sectionIndex = 0;
@@ -1467,6 +1483,7 @@
         var self = this;
         self.isAnimating = true;
         self.isCoolingDown = true;
+        self.lastSnappedIndex = sectionIndex;
 
         lenis.scrollTo(tops[sectionIndex], {
           duration: 0.8,       // cosmos: 0.8s
@@ -1476,6 +1493,8 @@
             setTimeout(function () {
               self.isAnimating = false;
               self.wheelAccum = 0;  // 큐잉된 입력 전부 폐기 (cosmos 동일)
+              // onComplete 후 실제 위치로 인덱스 재동기화
+              self.syncIndex();
               // 800ms 쿨다운: 스크롤은 되지만 스냅 불가
               setTimeout(function () {
                 self.isCoolingDown = false;
@@ -1509,6 +1528,10 @@
       // 미세 delta (스크롤바, 정밀 트랙패드) → Lenis에 위임
       if (Math.abs(delta) < sectionSnap.perEventMin) return;
 
+      // 방안 1: 누적 중에도 Lenis 차단 — scrollTop 고정으로 판정 정확도 확보
+      e.preventDefault();
+      e.stopImmediatePropagation();
+
       // 누적 delta 추적
       sectionSnap.wheelAccum += delta;
 
@@ -1519,12 +1542,13 @@
 
       // 임계값 도달 → 섹션 점프
       if (Math.abs(sectionSnap.wheelAccum) >= sectionSnap.threshold) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
         var direction = sectionSnap.wheelAccum > 0 ? 1 : -1;
         sectionSnap.wheelAccum = 0;
         clearTimeout(sectionSnap.wheelTimer);
-        sectionSnap.snapTo(sectionSnap.getCurrentSection() + direction);
+        // 방안 2: lastSnappedIndex 기준으로 점프
+        // 스크롤바 드래그 등 wheel 외 이동에 대비하여 현재 위치로 동기화
+        sectionSnap.syncIndex();
+        sectionSnap.snapTo(sectionSnap.lastSnappedIndex + direction);
       }
     }, { passive: false, capture: true });
 
@@ -1580,6 +1604,9 @@
       gsap.set('.solution-intro__sub .word', { opacity: 1, filter: 'none' });
       gsap.set('.demo__snippet', { opacity: 1 });
       gsap.set('.ending__brand .word', { opacity: 1, filter: 'none' });
+      gsap.set(['.kick__sub', '.kick__main'], { opacity: 1 });
+      gsap.set('.kick__grid', { opacity: 1 });
+      kickGridLines.forEach(function (l) { gsap.set(l.el, { attr: { 'stroke-dashoffset': 0 } }); });
       // 앱 실행 시퀀스 스킵 — 사만다 UI 즉시 표시
       gsap.set('.demo__homescreen', { opacity: 0 });
       gsap.set('.demo__app-circle', { scale: 15 });
@@ -1590,6 +1617,7 @@
       });
       // Normal flow — Lenis stays active for natural scrolling
       sectionSnap.scrollReady = true;
+      sectionSnap.syncIndex();
     } else {
       // Block scroll during hero load sequence
       lenis.stop();
@@ -1621,6 +1649,7 @@
       heroTL.eventCallback('onComplete', function () {
         lenis.start();
         sectionSnap.scrollReady = true;
+        sectionSnap.syncIndex();
         setupScrollAnimations();
       });
     }
@@ -1818,9 +1847,11 @@
           );
         },
         onLeave: function () {
+          gsap.killTweensOf('#problem-1 .problem__body');
           gsap.set('#problem-1 .problem__body', { opacity: 0 });
         },
         onLeaveBack: function () {
+          gsap.killTweensOf('#problem-1 .problem__body');
           gsap.set('#problem-1 .problem__body', { opacity: 0 });
         }
       });
@@ -1851,10 +1882,14 @@
           );
         },
         onLeave: function () {
+          gsap.killTweensOf('#problem-2 .problem__headline');
+          gsap.killTweensOf('#problem-2 .problem__body');
           gsap.set('#problem-2 .problem__headline', { opacity: 0, filter: 'blur(6px)' });
           gsap.set('#problem-2 .problem__body', { opacity: 0, filter: 'blur(8px)' });
         },
         onLeaveBack: function () {
+          gsap.killTweensOf('#problem-2 .problem__headline');
+          gsap.killTweensOf('#problem-2 .problem__body');
           gsap.set('#problem-2 .problem__headline', { opacity: 0, filter: 'blur(6px)' });
           gsap.set('#problem-2 .problem__body', { opacity: 0, filter: 'blur(8px)' });
         }
@@ -1880,10 +1915,12 @@
           animateWords('.solution-intro__sub', 0.7);
         },
         onLeave: function () {
+          gsap.killTweensOf('.solution-intro__text');
           gsap.set('.solution-intro__text', { opacity: 0, filter: 'blur(8px)' });
           resetWords('.solution-intro__sub');
         },
         onLeaveBack: function () {
+          gsap.killTweensOf('.solution-intro__text');
           gsap.set('.solution-intro__text', { opacity: 0, filter: 'blur(8px)' });
           resetWords('.solution-intro__sub');
         }
@@ -1983,36 +2020,94 @@
           });
         },
         onLeave: function () {
+          gsap.killTweensOf('.bridge__column');
           gsap.set('.bridge__column', { opacity: 0, y: 40 });
         },
         onLeaveBack: function () {
+          gsap.killTweensOf('.bridge__column');
           gsap.set('.bridge__column', { opacity: 0, y: 40 });
         }
       });
 
-      // ── kick: 극도로 느린 순수 fade (여백이 말하게 한다) ──
+      // ── kick: 구조선 드로잉 + 느린 텍스트 fade ──
+      // 선 데이터: [x1, y1, x2, y2, opacity, delay, duration, reverse]
+      // 수직 6 + 수평 7 = 13선, 넉넉한 간격, 길이 편차 극대화
+      var kickLines = [
+        // 수직선 (x 고정, y 이동) — 넓은 간격
+        [120, 50, 120, 780, 0.07, 0.0, 1.8, false],
+        [310, 200, 310, 900, 0.05, 0.6, 1.4, true],
+        [480, 0, 480, 550, 0.08, 0.3, 2.0, false],
+        [650, 150, 650, 1000, 0.06, 1.0, 1.6, true],
+        [820, 80, 820, 620, 0.05, 0.5, 1.5, false],
+        [950, 300, 950, 850, 0.07, 1.3, 1.2, true],
+        // 수평선 (y 고정, x 이동) — 넓은 간격
+        [60, 100, 700, 100, 0.06, 0.2, 1.6, true],
+        [200, 280, 950, 280, 0.05, 0.8, 1.8, false],
+        [0, 430, 580, 430, 0.07, 0.4, 1.4, true],
+        [350, 580, 1000, 580, 0.06, 1.1, 1.5, false],
+        [100, 720, 800, 720, 0.05, 0.7, 1.7, true],
+        [400, 850, 900, 850, 0.08, 1.4, 1.3, false],
+        [0, 960, 650, 960, 0.06, 0.9, 1.6, true]
+      ];
+      var kickGridLines = [];
+      (function buildKickGrid() {
+        var grid = document.querySelector('.kick__grid');
+        if (!grid) return;
+        var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 1000 1000');
+        svg.setAttribute('preserveAspectRatio', 'none');
+        svg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;';
+        kickLines.forEach(function (d) {
+          var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', d[0]); line.setAttribute('y1', d[1]);
+          line.setAttribute('x2', d[2]); line.setAttribute('y2', d[3]);
+          line.setAttribute('stroke', 'rgba(255,255,255,' + d[4] + ')');
+          line.setAttribute('stroke-width', '1.2');
+          // 선 길이 계산 → dasharray/dashoffset 세팅
+          var dx = d[2] - d[0], dy = d[3] - d[1];
+          var len = Math.sqrt(dx * dx + dy * dy);
+          line.setAttribute('stroke-dasharray', len);
+          line.setAttribute('stroke-dashoffset', d[7] ? -len : len);
+          svg.appendChild(line);
+          kickGridLines.push({ el: line, len: len, reverse: d[7], delay: d[5], dur: d[6] });
+        });
+        grid.appendChild(svg);
+      })();
+
+      function kickEnter() {
+        // 시퀀스: 보조 fade(0s) → 구조선 드로잉(1.0s) → 메인 느린 fade(2.2s)
+        // 1) 보조 텍스트 먼저
+        gsap.fromTo('.kick__sub',
+          { opacity: 0 }, { opacity: 1, duration: 2.0, ease: 'power1.out' });
+        // 2) 구조선 드로잉 — 보조가 반쯤 드러난 후 시작
+        gsap.set('.kick__grid', { opacity: 1 });
+        kickGridLines.forEach(function (l) {
+          gsap.fromTo(l.el,
+            { attr: { 'stroke-dashoffset': l.reverse ? -l.len : l.len } },
+            { attr: { 'stroke-dashoffset': 0 }, duration: l.dur, delay: 1.0 + l.delay, ease: 'power2.out' }
+          );
+        });
+        // 3) 메인 텍스트 — 구조선 위에 서서히 드러남
+        gsap.fromTo('.kick__main',
+          { opacity: 0 }, { opacity: 1, duration: 2.5, ease: 'power1.out', delay: 2.0 });
+      }
+      function kickLeave() {
+        gsap.killTweensOf(['.kick__sub', '.kick__main']);
+        gsap.set(['.kick__sub', '.kick__main'], { opacity: 0 });
+        // 선 초기화: 진행 중 트윈 kill → dashoffset 원복
+        kickGridLines.forEach(function (l) {
+          gsap.killTweensOf(l.el);
+          gsap.set(l.el, { attr: { 'stroke-dashoffset': l.reverse ? -l.len : l.len } });
+        });
+      }
       ScrollTrigger.create({
         trigger: '#kick',
         scroller: wrapper,
         start: 'top 80%',
-        onEnter: function () {
-          gsap.fromTo('.kick__text:not(.kick__text--second)',
-            { opacity: 0 }, { opacity: 1, duration: 2.0, ease: 'power1.out' });
-          gsap.fromTo('.kick__text--second',
-            { opacity: 0 }, { opacity: 1, duration: 2.0, ease: 'power1.out', delay: 1.2 });
-        },
-        onEnterBack: function () {
-          gsap.fromTo('.kick__text:not(.kick__text--second)',
-            { opacity: 0 }, { opacity: 1, duration: 2.0, ease: 'power1.out' });
-          gsap.fromTo('.kick__text--second',
-            { opacity: 0 }, { opacity: 1, duration: 2.0, ease: 'power1.out', delay: 1.2 });
-        },
-        onLeave: function () {
-          gsap.set('.kick__text', { opacity: 0 });
-        },
-        onLeaveBack: function () {
-          gsap.set('.kick__text', { opacity: 0 });
-        }
+        onEnter: kickEnter,
+        onEnterBack: kickEnter,
+        onLeave: kickLeave,
+        onLeaveBack: kickLeave
       });
 
       // ── ending: lead+CTA는 항상 표시 (S2 headline 패턴) ──
@@ -2033,6 +2128,7 @@
       }
       function endingLeave() {
         resetWords('.ending__brand');
+        gsap.killTweensOf('.ending__footer');
         gsap.set('.ending__footer', { opacity: 0 });
       }
       ScrollTrigger.create({
