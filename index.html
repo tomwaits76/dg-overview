@@ -1067,14 +1067,14 @@
         border-radius: 10px;
       }
 
-      /* 모바일 비활성 8존 — 상하 공간에 겹침 없이 배치 가능한 최대 12존 */
+      /* 모바일 비활성 8존 — 카테고리당 3개, 1줄:2줄 = 6:6 균등 */
       .demo__snippet[data-zone="2"],
-      .demo__snippet[data-zone="8"],
+      .demo__snippet[data-zone="4"],
       .demo__snippet[data-zone="9"],
       .demo__snippet[data-zone="10"],
+      .demo__snippet[data-zone="12"],
       .demo__snippet[data-zone="15"],
       .demo__snippet[data-zone="16"],
-      .demo__snippet[data-zone="18"],
       .demo__snippet[data-zone="20"] { display: none; }
 
       /* 모바일 12존 — 좌(left)/우(right) 양쪽 기준
@@ -1084,18 +1084,38 @@
       .demo__snippet[data-zone="3"]  { left:auto; right:4%;  top:2%;  bottom:auto; transform:none; }
       .demo__snippet[data-zone="7"]  { left:3%;  right:auto; top:10%; bottom:auto; transform:none; }
       .demo__snippet[data-zone="6"]  { left:auto; right:3%;  top:11%; bottom:auto; transform:none; }
-      .demo__snippet[data-zone="4"]  { left:7%;  right:auto; top:19%; bottom:auto; transform:none; }
-      .demo__snippet[data-zone="5"]  { left:auto; right:5%;  top:20%; bottom:auto; transform:none; }
+      .demo__snippet[data-zone="5"]  { left:7%;  right:auto; top:19%; bottom:auto; transform:none; }
+      .demo__snippet[data-zone="8"]  { left:auto; right:5%;  top:20%; bottom:auto; transform:none; }
       .demo__snippet[data-zone="11"] { left:3%;  right:auto; top:auto; bottom:19%; transform:none; }
-      .demo__snippet[data-zone="12"] { left:auto; right:4%;  top:auto; bottom:20%; transform:none; }
+      .demo__snippet[data-zone="18"] { left:auto; right:4%;  top:auto; bottom:20%; transform:none; }
       .demo__snippet[data-zone="17"] { left:5%;  right:auto; top:auto; bottom:10%; transform:none; }
       .demo__snippet[data-zone="14"] { left:auto; right:3%;  top:auto; bottom:11%; transform:none; }
       .demo__snippet[data-zone="13"] { left:6%;  right:auto; top:auto; bottom:1%;  transform:none; }
       .demo__snippet[data-zone="19"] { left:auto; right:6%;  top:auto; bottom:2%;  transform:none; }
 
+      .bridge__content {
+        padding: 40px 24px;
+      }
+      .bridge__framing {
+        margin-bottom: 24px;
+      }
       .bridge__grid {
         grid-template-columns: 1fr;
-        gap: 48px;
+        gap: 24px;
+      }
+      .bridge__icon {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 16px;
+      }
+      .bridge__icon--sm svg,
+      .bridge__icon--md svg,
+      .bridge__icon--base svg {
+        width: 100%;
+        margin-top: 0;
+      }
+      .bridge__title {
+        margin-bottom: 8px;
       }
 
       .kick__content {
@@ -2000,10 +2020,10 @@
         7, 19, 4, 8, 13, 14, 17, 11, 5, 16, 20, 1, 9, 10, 15, 6, 18, 2, 12, 3
       ];
       // 모바일 12존: 같은 행 좌+우가 동시 4개 안에 공존하지 않도록 배치
-      // 행: 상1(1,3) 상2(7,6) 상3(4,5) 하1(11,12) 하2(17,14) 하3(13,19)
+      // 행: 상1(1,3) 상2(7,6) 상3(5,8) 하1(11,18) 하2(17,14) 하3(13,19)
       // L↔R 교차 + 상↔하 교차 + 같은 행 간격 6+
       var snippetOrderMobile = [
-        1, 14, 6, 19, 4, 12, 3, 17, 7, 13, 5, 11
+        1, 14, 5, 19, 7, 18, 3, 17, 8, 13, 6, 11
       ];
 
       function buildSnippetTimeline() {
