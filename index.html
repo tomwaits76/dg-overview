@@ -672,7 +672,7 @@
       font-size: 15px;
       color: var(--white);
       line-height: 1.6;
-      max-width: 220px;
+      max-width: 260px;
       padding: 12px 18px;
       background: rgba(255, 255, 255, 0.06);
       border-radius: 14px;
@@ -680,13 +680,15 @@
       backface-visibility: hidden;
     }
 
-    /* ── 13존 방사형 배치 — Cosmos S3 비대칭 분포 ──
+    /* ── 20존 방사형 배치 — Cosmos S3 비대칭 분포 ──
        상단 5존(①~⑤): 섹션 % 고정
-       중단 4존(⑥~⑨): 디바이스 에지 추적 (JS → CSS 변수)
-       하단 4존(⑩~⑬): 섹션 % 고정 */
+       상단깊 2존(⑭⑮): ①⑤와 에지 사이
+       중단 6존(⑥~⑨,⑯⑰): 디바이스 에지 추적 (JS → CSS 변수)
+       하단깊 2존(⑲⑳): ⑩⑬ 위쪽
+       하단 5존(⑩~⑬,⑱): 섹션 % 고정 */
     .demo__snippet[data-zone="1"]  { left: 3%;  top: 14%; }
     .demo__snippet[data-zone="2"]  { left: 20%; top: 6%; }
-    .demo__snippet[data-zone="3"]  { left: 50%; top: 4%; transform: translateX(-50%); }
+    .demo__snippet[data-zone="3"]  { left: 50%; top: 2%; transform: translateX(-50%); }
     .demo__snippet[data-zone="4"]  { right: 18%; top: 8%; }
     .demo__snippet[data-zone="5"]  { right: 2%;  top: 16%; }
     .demo__snippet[data-zone="6"]  { left: var(--dev-edge-l, 30%); top: 33%; transform: translateX(calc(-100% - 30px)); }
@@ -697,6 +699,13 @@
     .demo__snippet[data-zone="11"] { left: 24%; bottom: 10%; }
     .demo__snippet[data-zone="12"] { right: 20%; bottom: 16%; }
     .demo__snippet[data-zone="13"] { right: 3%;  bottom: 6%; }
+    .demo__snippet[data-zone="14"] { left: 50%; top: 10%; transform: translateX(-50%); }
+    .demo__snippet[data-zone="15"] { right: 6%; top: 21%; }
+    .demo__snippet[data-zone="16"] { left: var(--dev-edge-l, 30%); top: 43%; transform: translateX(calc(-100% - 30px)); }
+    .demo__snippet[data-zone="17"] { left: var(--dev-edge-r, 70%); top: 45%; transform: translateX(30px); }
+    .demo__snippet[data-zone="18"] { left: 56%; bottom: 5%; }
+    .demo__snippet[data-zone="19"] { left: 44%; bottom: 14%; }
+    .demo__snippet[data-zone="20"] { right: 10%; bottom: 24%; }
 
     /* ============================================
        Section 6: Solution Bridge — 3열 인포그래픽
@@ -1052,10 +1061,37 @@
       }
 
       .demo__snippet {
-        font-size: 13px;
-        padding: 10px 14px;
-        max-width: 180px;
+        font-size: 12px;
+        padding: 8px 12px;
+        max-width: 195px;
+        border-radius: 10px;
       }
+
+      /* 모바일 비활성 8존 — 상하 공간에 겹침 없이 배치 가능한 최대 12존 */
+      .demo__snippet[data-zone="2"],
+      .demo__snippet[data-zone="8"],
+      .demo__snippet[data-zone="9"],
+      .demo__snippet[data-zone="10"],
+      .demo__snippet[data-zone="15"],
+      .demo__snippet[data-zone="16"],
+      .demo__snippet[data-zone="18"],
+      .demo__snippet[data-zone="20"] { display: none; }
+
+      /* 모바일 12존 — 좌(left)/우(right) 양쪽 기준
+         3행(top/btm 1%,10%,19%) × 상/하 = 6행. 행당 좌1+우1 = 2존.
+         행 간격 9%=60px > 스니펫 최대 54px → 겹침 원천 차단. */
+      .demo__snippet[data-zone="1"]  { left:4%;  right:auto; top:1%;  bottom:auto; transform:none; }
+      .demo__snippet[data-zone="3"]  { left:auto; right:4%;  top:2%;  bottom:auto; transform:none; }
+      .demo__snippet[data-zone="7"]  { left:3%;  right:auto; top:10%; bottom:auto; transform:none; }
+      .demo__snippet[data-zone="6"]  { left:auto; right:3%;  top:11%; bottom:auto; transform:none; }
+      .demo__snippet[data-zone="4"]  { left:7%;  right:auto; top:19%; bottom:auto; transform:none; }
+      .demo__snippet[data-zone="5"]  { left:auto; right:5%;  top:20%; bottom:auto; transform:none; }
+      .demo__snippet[data-zone="11"] { left:3%;  right:auto; top:auto; bottom:19%; transform:none; }
+      .demo__snippet[data-zone="12"] { left:auto; right:4%;  top:auto; bottom:20%; transform:none; }
+      .demo__snippet[data-zone="17"] { left:5%;  right:auto; top:auto; bottom:10%; transform:none; }
+      .demo__snippet[data-zone="14"] { left:auto; right:3%;  top:auto; bottom:11%; transform:none; }
+      .demo__snippet[data-zone="13"] { left:6%;  right:auto; top:auto; bottom:1%;  transform:none; }
+      .demo__snippet[data-zone="19"] { left:auto; right:6%;  top:auto; bottom:2%;  transform:none; }
 
       .bridge__grid {
         grid-template-columns: 1fr;
@@ -1282,19 +1318,30 @@
 
         <!-- 방사형 대화 스니펫 — 13존 Cosmos S3 패턴 -->
         <div class="demo__snippets">
+          <!-- 선제적 대화 (1~5) -->
           <div class="demo__snippet" data-zone="1">오늘 날씨가 꽤 쌀쌀하네요.<br>외출 계획 있으세요?</div>
           <div class="demo__snippet" data-zone="2">오늘 병원 가시는 날이죠?</div>
           <div class="demo__snippet" data-zone="3">점심은 드셨어요?</div>
-          <div class="demo__snippet" data-zone="4">좋아하시는 프로그램 곧 시작해요.</div>
-          <div class="demo__snippet" data-zone="5">무릎은 좀 나아지셨어요?<br>저번에 많이 아프셨잖아요.</div>
-          <div class="demo__snippet" data-zone="6">손주 시험 잘 봤다면서요?</div>
-          <div class="demo__snippet" data-zone="7">지난번에 좋아하신다던<br>그 노래, 찾아뒀어요.</div>
-          <div class="demo__snippet" data-zone="8">요즘 기운이 없어 보이세요.<br>무슨 일 있으신 건 아니죠?</div>
-          <div class="demo__snippet" data-zone="9">그럴 수 있어요.<br>너무 속상해 마세요.</div>
-          <div class="demo__snippet" data-zone="10">오늘따라 목소리가 한결 밝으시네요.</div>
-          <div class="demo__snippet" data-zone="11">오후 2시쯤에는<br>좀 따뜻해질 거예요.</div>
-          <div class="demo__snippet" data-zone="12">내일 비 온대요.<br>빨래는 오늘 하시는 게 좋겠어요.</div>
-          <div class="demo__snippet" data-zone="13">어제 산책은 즐거우셨어요?</div>
+          <div class="demo__snippet" data-zone="4">좋아하시는 프로 곧 시작해요.</div>
+          <div class="demo__snippet" data-zone="5">약 드실 시간이에요.</div>
+          <!-- 맥락 기억 (6~10) -->
+          <div class="demo__snippet" data-zone="6">무릎은 좀 나아지셨어요?<br>저번에 많이 아프셨잖아요.</div>
+          <div class="demo__snippet" data-zone="7">손주 시험 잘 봤다면서요?</div>
+          <div class="demo__snippet" data-zone="8">좋아하시는 노래, 찾아두었어요.</div>
+          <div class="demo__snippet" data-zone="9">따님 생신이 다음 주던데,<br>선물 생각해 보셨어요?</div>
+          <div class="demo__snippet" data-zone="10">지난번에 드셨던 약,<br>오늘 다 떨어지지 않았나요?</div>
+          <!-- 관계 진화 (11~15) -->
+          <div class="demo__snippet" data-zone="11">요즘 기운이 없어 보이세요.<br>무슨 일 있으신 건 아니죠?</div>
+          <div class="demo__snippet" data-zone="12">그럴 수 있어요. 속상해 마세요.</div>
+          <div class="demo__snippet" data-zone="13">오늘 목소리가 한결 밝으시네요.</div>
+          <div class="demo__snippet" data-zone="14">요즘 부쩍 웃음이 느셨어요.<br>좋은 일 있으신 거죠?</div>
+          <div class="demo__snippet" data-zone="15">혼자 고민하지 마세요.<br>저와 이야기 나누어요.</div>
+          <!-- 일상 동반 (16~20) -->
+          <div class="demo__snippet" data-zone="16">2시쯤에는 좀 따뜻해질 거예요.</div>
+          <div class="demo__snippet" data-zone="17">내일 비 온대요.<br>빨래는 오늘 하시는 게 좋겠어요.</div>
+          <div class="demo__snippet" data-zone="18">어제 산책은 즐거우셨어요?</div>
+          <div class="demo__snippet" data-zone="19">오늘 미세먼지가 많아요.<br>마스크 챙기세요.</div>
+          <div class="demo__snippet" data-zone="20">내일 아침은 좀 쌀쌀할 거예요.<br>겉옷 꼭 챙기세요.</div>
         </div>
 
       </section>
@@ -1416,7 +1463,7 @@
       <section id="kick" aria-label="킥">
         <div class="kick__grid" aria-hidden="true"></div>
         <div class="kick__content">
-          <p class="kick__sub">사람이 머물고, 돌아오고, 깊어지는 구조.</p>
+          <p class="kick__sub">사람이 머물고, 돌아오며, 깊어지는 구조</p>
           <p class="kick__main">게임이 오랫동안 증명한 그 설계를,<br>지금 여기에 씁니다.</p>
         </div>
       </section>
@@ -1764,54 +1811,6 @@
         { opacity: 1, duration: 0.6, ease: 'none', immediateRender: false },
         2.7);
 
-      // ── Phase 5: 스니펫 순환 (t=2.7s~, 무한 루프) ──
-      // 파동 등장(2.7s)과 동시에 첫 스니펫 시작 → 이후 무한 순환
-      // Cosmos S3 패턴: 공간 핑퐁 (대각선 점프, 사분면 분산)
-      // 생애주기: fade-in 1.0s → hold 1.2s → fade-out 0.8s = 3.0s
-      // 동시 표시: 3.0 / 0.85 ≈ 3.5 → 3~4개
-      // 사이클: 13.2s (13개 순환) + 1.0s 호흡 = 14.2s/cycle
-      var snippetTL = gsap.timeline({ repeat: -1, repeatDelay: 1.0 });
-
-      var snippetOrder = [
-        { zone: 3,  t: 0.00 },   // 상단 중앙
-        { zone: 10, t: 0.85 },   // 좌하 원거리
-        { zone: 7,  t: 1.70 },   // 우측 근접
-        { zone: 1,  t: 2.55 },   // 좌상 원거리
-        { zone: 13, t: 3.40 },   // 우하 원거리
-        { zone: 6,  t: 4.25 },   // 좌측 근접
-        { zone: 4,  t: 5.10 },   // 우상 중거리
-        { zone: 11, t: 5.95 },   // 좌하 중거리
-        { zone: 2,  t: 6.80 },   // 좌상 중거리
-        { zone: 9,  t: 7.65 },   // 우측 근접(하)
-        { zone: 5,  t: 8.50 },   // 우상 원거리
-        { zone: 8,  t: 9.35 },   // 좌측 근접(하)
-        { zone: 12, t: 10.20 }   // 우하 중거리
-      ];
-
-      var fadeIn = 1.0;
-      var hold = 1.2;
-      var fadeOut = 0.8;
-
-      snippetOrder.forEach(function(item) {
-        var sel = '.demo__snippet[data-zone="' + item.zone + '"]';
-
-        // 진입: blur + scale + y 복합 (다른 섹션과 차별화)
-        snippetTL.fromTo(sel,
-          { opacity: 0, scale: 0.96, y: 8, filter: 'blur(4px)' },
-          { opacity: 1, scale: 1, y: 0, filter: 'blur(0px)',
-            duration: fadeIn, ease: 'power2.out', immediateRender: false },
-          item.t);
-
-        // 퇴장: 위로 살짝 사라짐 (진입과 비대칭)
-        snippetTL.to(sel,
-          { opacity: 0, scale: 0.96, y: -6, filter: 'blur(3px)',
-            duration: fadeOut, ease: 'power2.in' },
-          item.t + fadeIn + hold);
-      });
-
-      // 파동 fade-in(2.7s)과 동시에 스니펫 루프 시작
-      tl.add(snippetTL, 2.7);
-
       return tl;
     }
 
@@ -1991,47 +1990,104 @@
         }
       });
 
-      // ── solution-demo: 앱 실행 시퀀스 (whileInView) ──
-      // 무상태 방식: 매 진입마다 timeline kill → 새로 생성 → play
-      // pause/restart/invalidate 조합의 overwrite:'auto' 충돌을 원천 차단
+      // ── solution-demo: 앱 실행(Phase 1~4) + 스니펫 순환(Phase 5) ──
+      // demoTL: Phase 1~4 (앱 실행). snippetTL: Phase 5 (스니펫 순환, 독립)
+      // snippetTL만 독립 kill/교체 가능 → resize 시 hold 분기 반영, 앱 실행 점프 없음
       var demoTL = null;
+      var snippetTL = null;
+
+      var snippetOrderDesktop = [
+        7, 19, 4, 8, 13, 14, 17, 11, 5, 16, 20, 1, 9, 10, 15, 6, 18, 2, 12, 3
+      ];
+      // 모바일 12존: 같은 행 좌+우가 동시 4개 안에 공존하지 않도록 배치
+      // 행: 상1(1,3) 상2(7,6) 상3(4,5) 하1(11,12) 하2(17,14) 하3(13,19)
+      // L↔R 교차 + 상↔하 교차 + 같은 행 간격 6+
+      var snippetOrderMobile = [
+        1, 14, 6, 19, 4, 12, 3, 17, 7, 13, 5, 11
+      ];
+
+      function buildSnippetTimeline() {
+        var isMobile = window.innerWidth <= 768;
+        var order = isMobile ? snippetOrderMobile : snippetOrderDesktop;
+        var fadeIn = 1.0;
+        var hold = isMobile ? 1.5 : 3.0;
+        var fadeOut = 0.8;
+        var stagger = 0.85;
+        var tl = gsap.timeline({ repeat: -1, repeatDelay: 1.0, paused: true });
+        order.forEach(function(zone, i) {
+          var sel = '.demo__snippet[data-zone="' + zone + '"]';
+          var t = i * stagger;
+          tl.fromTo(sel,
+            { opacity: 0, scale: 0.96, filter: 'blur(4px)' },
+            { opacity: 1, scale: 1, filter: 'blur(0px)',
+              duration: fadeIn, ease: 'power2.out', immediateRender: false },
+            t);
+          tl.to(sel,
+            { opacity: 0, scale: 0.97, filter: 'blur(3px)',
+              duration: fadeOut, ease: 'power2.in' },
+            t + fadeIn + hold);
+        });
+        return tl;
+      }
+
+      function resetSnippets() {
+        if (snippetTL) { snippetTL.kill(); snippetTL = null; }
+        var snippets = document.querySelectorAll('.demo__snippet');
+        gsap.killTweensOf(snippets);
+        gsap.set(snippets, { opacity: 0, scale: 0.96, filter: 'blur(4px)' });
+      }
 
       function resetDemoState() {
-        if (demoTL) {
-          demoTL.kill();
-          demoTL = null;
-        }
-        // 앱 실행 요소 리셋
+        if (demoTL) { demoTL.kill(); demoTL = null; }
         gsap.killTweensOf('.demo__homescreen');
         gsap.killTweensOf('.demo__app-circle');
         gsap.killTweensOf('.demo__samantha-ui');
         gsap.set('.demo__homescreen', { opacity: 1 });
         gsap.set('.demo__app-circle', { scale: 1 });
         gsap.set('.demo__samantha-ui', { opacity: 0 });
-        // 스니펫 리셋 — 초기 상태(불투명, 살짝 축소, 아래, 블러)로 복원
-        var snippets = document.querySelectorAll('.demo__snippet');
-        gsap.killTweensOf(snippets);
-        gsap.set(snippets, { opacity: 0, scale: 0.96, y: 8, filter: 'blur(4px)' });
+        resetSnippets();
       }
+
+      function startDemo() {
+        if (viewSwitchActive) return; // 뷰 전환 중에는 ScrollTrigger 재트리거 무시
+        var snips = document.querySelectorAll('.demo__snippet');
+        snips.forEach(function(s) { s.style.willChange = 'transform, opacity, filter'; });
+        resetDemoState();
+        demoTL = buildAppLaunchTimeline();
+        demoTL.call(function () {
+          resetSnippets();
+          snippetTL = buildSnippetTimeline();
+          snippetTL.play();
+        }, null, 3.0);
+        demoTL.play();
+      }
+
+      // 뷰 전환 시 snippetTL만 교체 (앱 실행 건드리지 않음, 1초 지연)
+      var lastWasMobile = window.innerWidth <= 768;
+      var viewSwitchActive = false;
+      var viewSwitchTimer = null;
+      window.addEventListener('resize', function () {
+        var nowMobile = window.innerWidth <= 768;
+        if (nowMobile !== lastWasMobile) {
+          lastWasMobile = nowMobile;
+          viewSwitchActive = true;
+          if (viewSwitchTimer) clearTimeout(viewSwitchTimer);
+          // snippetTL만 교체, demoTL/앱 실행은 유지
+          resetSnippets();
+          snippetTL = buildSnippetTimeline();
+          viewSwitchTimer = setTimeout(function () {
+            snippetTL.play();
+            viewSwitchActive = false;
+          }, 500);
+        }
+      });
 
       ScrollTrigger.create({
         trigger: '#solution-demo',
         scroller: wrapper,
         start: 'top 80%',
-        onEnter: function () {
-          var snips = document.querySelectorAll('.demo__snippet');
-          snips.forEach(function(s) { s.style.willChange = 'transform, opacity, filter'; });
-          resetDemoState();
-          demoTL = buildAppLaunchTimeline();
-          demoTL.play();
-        },
-        onEnterBack: function () {
-          var snips = document.querySelectorAll('.demo__snippet');
-          snips.forEach(function(s) { s.style.willChange = 'transform, opacity, filter'; });
-          resetDemoState();
-          demoTL = buildAppLaunchTimeline();
-          demoTL.play();
-        },
+        onEnter: startDemo,
+        onEnterBack: startDemo,
         onLeave: function () {
           resetDemoState();
           var snips = document.querySelectorAll('.demo__snippet');
