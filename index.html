@@ -721,6 +721,17 @@
       padding: 80px 40px;
     }
 
+    .bridge__framing {
+      font-family: var(--font-sans);
+      font-weight: 400;
+      font-size: clamp(18px, 2.5vw, 24px);
+      color: var(--text-on-dark-sub);
+      text-align: center;
+      line-height: 1.7;
+      margin-bottom: 64px;
+      opacity: 0;
+    }
+
     .bridge__grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -736,15 +747,21 @@
     }
 
     .bridge__icon {
-      width: clamp(120px, 14vw, 180px);
-      height: clamp(120px, 14vw, 180px);
+      width: clamp(160px, 18vw, 240px);
+      height: clamp(160px, 18vw, 240px);
       margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .bridge__icon svg {
-      width: 100%;
-      height: 100%;
+      height: auto;
     }
+
+    .bridge__icon--sm svg { width: 90%; }
+    .bridge__icon--md svg { width: 105%; }
+    .bridge__icon--base svg { width: 100%; margin-top: -3%; }
 
     .bridge__title {
       font-family: var(--font-sans);
@@ -758,7 +775,7 @@
     .bridge__desc {
       font-family: var(--font-sans);
       font-weight: 300;
-      font-size: clamp(14px, 1.4vw, 16px);
+      font-size: clamp(14px, 1.4vw, 18px);
       color: var(--text-on-dark-sub);
       line-height: 1.7;
     }
@@ -1287,61 +1304,106 @@
            ========================================== -->
       <section id="solution-bridge" aria-label="기술 브릿지">
         <div class="bridge__content">
+          <p class="bridge__framing">이 경험을 만드는 세 가지 원리</p>
           <div class="bridge__grid">
 
-            <!-- Column 1: 선제적 대화 — 퍼져나가는 파동 -->
+            <!-- Column 1: 선제적 대화 — 아이소메트릭 적층 구조 (Linear FIG 0.2) -->
             <div class="bridge__column">
-              <div class="bridge__icon">
-                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round">
-                  <!-- 중심에서 퍼지는 동심원 3개 -->
-                  <circle cx="52" cy="60" r="15" opacity="0.9"/>
-                  <circle cx="52" cy="60" r="30" opacity="0.5"/>
-                  <circle cx="52" cy="60" r="45" opacity="0.25"/>
-                  <!-- 시계 문자판 (선제 = 먼저 다가감) -->
-                  <circle cx="90" cy="30" r="12" opacity="0.7"/>
-                  <line x1="90" y1="30" x2="90" y2="22" opacity="0.7"/>
-                  <line x1="90" y1="30" x2="96" y2="33" opacity="0.7"/>
+              <div class="bridge__icon bridge__icon--sm">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 265 262" fill="none">
+                  <path stroke="rgba(255,255,255,0.2)" stroke-linecap="round" stroke-width="0.5" d="m19.107 186.583 108.543 54.272a10.29 10.29 0 0 0 9.2 0l108.543-54.272"/>
+                  <path stroke="rgba(255,255,255,0.2)" stroke-linecap="round" stroke-width="0.5" d="m19.107 168.583 108.543 54.272a10.29 10.29 0 0 0 9.2 0l108.543-54.272"/>
+                  <path stroke="rgba(255,255,255,0.2)" stroke-linecap="round" stroke-width="0.5" d="m19.107 150.583 108.543 54.272a10.29 10.29 0 0 0 9.2 0l108.543-54.272"/>
+                  <path stroke="rgba(255,255,255,0.2)" stroke-linecap="round" stroke-width="0.5" d="m19.107 132.583 108.543 54.272a10.29 10.29 0 0 0 9.2 0l108.543-54.272"/>
+                  <path stroke="rgba(255,255,255,0.2)" stroke-linecap="round" stroke-width="0.5" d="m19.107 114.583 108.543 54.272a10.29 10.29 0 0 0 9.2 0l108.543-54.272"/>
+                  <path stroke="rgba(255,255,255,0.8)" stroke-width="0.5" d="M250.355 107.636a3.43 3.43 0 0 1 1.895 3.067v88.333a3.43 3.43 0 0 1-1.895 3.067l-111.972 55.985a13.71 13.71 0 0 1-12.266 0L14.145 202.103a3.43 3.43 0 0 1-1.895-3.067v-88.333c0-1.299.734-2.486 1.895-3.067l115.038-57.52a6.86 6.86 0 0 1 6.134 0z"/>
+                  <g filter="url(#bridge-fig02-shadow)">
+                    <path fill="#1C1C1E" d="M250.355 66.493a3.43 3.43 0 0 1 1.895 3.067v9.476a3.43 3.43 0 0 1-1.895 3.067L136.85 138.855a10.29 10.29 0 0 1-9.2 0L14.145 82.103a3.43 3.43 0 0 1-1.895-3.067V69.56c0-1.299.734-2.486 1.895-3.067L129.183 8.974a6.86 6.86 0 0 1 6.134 0z"/>
+                    <path stroke="rgba(255,255,255,0.8)" stroke-width="0.5" d="M250.355 66.493a3.43 3.43 0 0 1 1.895 3.067v9.476a3.43 3.43 0 0 1-1.895 3.067L136.85 138.855a10.29 10.29 0 0 1-9.2 0L14.145 82.103a3.43 3.43 0 0 1-1.895-3.067V69.56c0-1.299.734-2.486 1.895-3.067L129.183 8.974a6.86 6.86 0 0 1 6.134 0z"/>
+                  </g>
+                  <path stroke="rgba(255,255,255,0.2)" stroke-linecap="round" stroke-width="0.5" d="m19.107 71.726 108.543 54.272a10.29 10.29 0 0 0 9.2 0l108.543-54.272"/>
+                  <path stroke="rgba(255,255,255,0.2)" stroke-width="0.5" d="M103.378 91.627c-.908-.281-.495-.95.573-.95h56.598c1.068 0 1.48.669.573.95-17.631 5.466-40.113 5.466-57.744 0ZM91.088 86.43c.205.117.502.183.813.183h80.697c.311 0 .608-.066.814-.182a42 42 0 0 0 4.679-3.057c.47-.357-.052-.824-.907-.824H87.316c-.856 0-1.378.467-.907.824a42 42 0 0 0 4.679 3.057ZM81.032 78.14c.16.21.564.346 1.013.346h100.409c.449 0 .853-.136 1.014-.346q1.152-1.502 1.939-3.05c.173-.34-.349-.667-1.052-.667H80.145c-.704 0-1.226.327-1.052.668a19.7 19.7 0 0 0 1.938 3.05ZM78.564 70.36c-.574 0-1.052-.222-1.084-.508-.849-7.528 4.478-15.198 15.98-20.95 21.423-10.71 56.157-10.71 77.58 0 11.502 5.752 16.828 13.422 15.979 20.95-.032.286-.51.507-1.084.507z"/>
+                  <path stroke="rgba(255,255,255,0.2)" stroke-dasharray="1 3" stroke-linecap="round" d="M12.679 84.584v20.142M132.25 144.583v20.143M251.821 84.584v20.142"/>
+                  <defs>
+                    <filter id="bridge-fig02-shadow" width="264.5" height="156.191" x="0" y="0" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse">
+                      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+                      <feColorMatrix in="SourceAlpha" result="hardAlpha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+                      <feOffset dy="4"/>
+                      <feGaussianBlur stdDeviation="6"/>
+                      <feComposite in2="hardAlpha" operator="out"/>
+                      <feColorMatrix values="0 0 0 0 0.07 0 0 0 0 0.07 0 0 0 0 0.07 0 0 0 0.8 0"/>
+                      <feBlend in2="BackgroundImageFix" result="effect1"/>
+                      <feBlend in="SourceGraphic" in2="effect1" result="shape"/>
+                    </filter>
+                  </defs>
                 </svg>
               </div>
               <h3 class="bridge__title">선제적 대화</h3>
-              <p class="bridge__desc">생활 패턴을 학습하여<br>먼저 말을 거는 AI</p>
+              <p class="bridge__desc">사용자의 생활 패턴을 학습하여,<br>적절한 시점에 먼저 말을 거는 AI</p>
             </div>
 
-            <!-- Column 2: 사실적인 맥락 — 연결된 기억층 -->
+            <!-- Column 2: 사실적인 맥락 — 다중 큐브 모듈 (Linear FIG 0.3) -->
             <div class="bridge__column">
-              <div class="bridge__icon">
-                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round">
-                  <!-- 겹친 원 3개 (수직 오프셋) -->
-                  <circle cx="60" cy="38" r="22" opacity="0.35"/>
-                  <circle cx="60" cy="60" r="22" opacity="0.55"/>
-                  <circle cx="60" cy="82" r="22" opacity="0.8"/>
-                  <!-- 연결선 (점선) -->
-                  <line x1="60" y1="16" x2="60" y2="104" stroke-dasharray="3,5" opacity="0.4"/>
+              <div class="bridge__icon bridge__icon--md">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 304 281" fill="none">
+                  <path fill="#1C1C1E" stroke="rgba(255,255,255,0.8)" stroke-width="0.5" d="M148.534 1.068a7.75 7.75 0 0 1 6.932 0l50.211 25.106a3.75 3.75 0 0 1 2.073 3.354v125.056c0 1.42-.803 2.718-2.073 3.354l-50.211 25.105a7.75 7.75 0 0 1-6.932 0l-50.21-25.105a3.75 3.75 0 0 1-2.074-3.354V29.528a3.75 3.75 0 0 1 2.073-3.354z"/>
+                  <path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" stroke-width="0.5" d="m102 30.056 46.422 23.21a8 8 0 0 0 7.156 0L202 30.057"/>
+                  <g stroke-width="0.5" filter="url(#bridge-fig03-s0)">
+                    <path fill="#1C1C1E" stroke="rgba(255,255,255,0.2)" d="M84.534 139.068a7.76 7.76 0 0 1 6.932 0l50.211 25.106a3.75 3.75 0 0 1 2.073 3.353v19.057c0 1.42-.803 2.718-2.073 3.354l-50.211 25.105a7.75 7.75 0 0 1-6.932 0l-50.21-25.105a3.75 3.75 0 0 1-2.074-3.354v-19.057a3.75 3.75 0 0 1 2.073-3.353z"/>
+                    <path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="m38 168.056 46.422 23.211a8 8 0 0 0 7.156 0L138 168.056"/>
+                  </g>
+                  <g filter="url(#bridge-fig03-s1)">
+                    <path fill="#1C1C1E" stroke="rgba(255,255,255,0.8)" stroke-width="0.5" d="M84.534 53.069a7.75 7.75 0 0 1 6.932 0l50.211 25.105a3.75 3.75 0 0 1 2.073 3.353v73.057c0 1.42-.803 2.718-2.073 3.354l-50.211 25.105a7.75 7.75 0 0 1-6.932 0l-50.21-25.105a3.75 3.75 0 0 1-2.074-3.354V81.528a3.75 3.75 0 0 1 2.073-3.354z"/>
+                    <path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" stroke-width="0.5" d="m38 82.056 46.422 23.211a8 8 0 0 0 7.156 0L138 82.056"/>
+                  </g>
+                  <g stroke-width="0.5" filter="url(#bridge-fig03-s2)">
+                    <path fill="#1C1C1E" stroke="rgba(255,255,255,0.8)" d="M212.534 97.069a7.75 7.75 0 0 1 6.932 0l50.211 25.105a3.75 3.75 0 0 1 2.073 3.353v61.057c0 1.42-.803 2.718-2.073 3.354l-50.211 25.105a7.75 7.75 0 0 1-6.932 0l-50.211-25.105a3.75 3.75 0 0 1-2.073-3.354v-61.057a3.75 3.75 0 0 1 2.073-3.353z"/>
+                    <path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="m166 126.056 46.422 23.211a8 8 0 0 0 7.156 0L266 126.056"/>
+                  </g>
+                  <g stroke-width="0.5" filter="url(#bridge-fig03-s3)">
+                    <path fill="#1C1C1E" stroke="rgba(255,255,255,0.2)" d="M212.534 64.069a7.75 7.75 0 0 1 6.932 0l50.211 25.105a3.75 3.75 0 0 1 2.073 3.353v19.057c0 1.42-.803 2.718-2.073 3.354l-50.211 25.105a7.75 7.75 0 0 1-6.932 0l-50.211-25.105a3.75 3.75 0 0 1-2.073-3.354V92.528a3.75 3.75 0 0 1 2.073-3.354z"/>
+                    <path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="m166 93.056 46.422 23.211a8 8 0 0 0 7.156 0L266 93.056"/>
+                  </g>
+                  <g filter="url(#bridge-fig03-s4)">
+                    <path fill="#1C1C1E" stroke="rgba(255,255,255,0.8)" stroke-width="0.5" d="M148.534 145.068a7.76 7.76 0 0 1 6.932 0l50.211 25.106a3.75 3.75 0 0 1 2.073 3.353v45.057c0 1.42-.803 2.718-2.073 3.354l-50.211 25.105a7.75 7.75 0 0 1-6.932 0l-50.21-25.105a3.75 3.75 0 0 1-2.074-3.354v-45.057a3.75 3.75 0 0 1 2.073-3.353z"/>
+                    <path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" stroke-width="0.5" d="m102 174.056 46.422 23.211a8 8 0 0 0 7.156 0L202 174.056"/>
+                  </g>
+                  <defs>
+                    <filter id="bridge-fig03-s0" width="176" height="144" x="0" y="105.056" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="bg"/><feColorMatrix in="SourceAlpha" result="ha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/><feGaussianBlur stdDeviation="16"/><feComposite in2="ha" operator="out"/><feColorMatrix values="0 0 0 0 0.07 0 0 0 0 0.07 0 0 0 0 0.07 0 0 0 0.85 0"/><feBlend in2="bg" result="s"/><feBlend in="SourceGraphic" in2="s" result="shape"/></filter>
+                    <filter id="bridge-fig03-s1" width="176" height="198" x="0" y="19.056" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="bg"/><feColorMatrix in="SourceAlpha" result="ha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/><feGaussianBlur stdDeviation="16"/><feComposite in2="ha" operator="out"/><feColorMatrix values="0 0 0 0 0.07 0 0 0 0 0.07 0 0 0 0 0.07 0 0 0 0.85 0"/><feBlend in2="bg" result="s"/><feBlend in="SourceGraphic" in2="s" result="shape"/></filter>
+                    <filter id="bridge-fig03-s2" width="176" height="210" x="128" y="39.056" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="bg"/><feColorMatrix in="SourceAlpha" result="ha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/><feGaussianBlur stdDeviation="16"/><feComposite in2="ha" operator="out"/><feColorMatrix values="0 0 0 0 0.07 0 0 0 0 0.07 0 0 0 0 0.07 0 0 0 0.85 0"/><feBlend in2="bg" result="s"/><feBlend in="SourceGraphic" in2="s" result="shape"/></filter>
+                    <filter id="bridge-fig03-s3" width="176" height="144" x="128" y="30.056" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="bg"/><feColorMatrix in="SourceAlpha" result="ha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/><feGaussianBlur stdDeviation="16"/><feComposite in2="ha" operator="out"/><feColorMatrix values="0 0 0 0 0.07 0 0 0 0 0.07 0 0 0 0 0.07 0 0 0 0.85 0"/><feBlend in2="bg" result="s"/><feBlend in="SourceGraphic" in2="s" result="shape"/></filter>
+                    <filter id="bridge-fig03-s4" width="176" height="170" x="64" y="111.056" color-interpolation-filters="sRGB" filterUnits="userSpaceOnUse"><feFlood flood-opacity="0" result="bg"/><feColorMatrix in="SourceAlpha" result="ha" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/><feGaussianBlur stdDeviation="16"/><feComposite in2="ha" operator="out"/><feColorMatrix values="0 0 0 0 0.07 0 0 0 0 0.07 0 0 0 0 0.07 0 0 0 0.85 0"/><feBlend in2="bg" result="s"/><feBlend in="SourceGraphic" in2="s" result="shape"/></filter>
+                  </defs>
                 </svg>
               </div>
               <h3 class="bridge__title">사실적인 맥락</h3>
-              <p class="bridge__desc">현실 정보와 사건까지 담은<br>복합 기억</p>
+              <p class="bridge__desc">날씨, 일정, 건강 이력까지.<br>현실 정보와 사건을 담은 복합 기억</p>
             </div>
 
-            <!-- Column 3: 진화하는 관계 — 성장하는 나선 -->
+            <!-- Column 3: 진화하는 관계 — 수렴 레이어 (Linear FIG 0.4) -->
             <div class="bridge__column">
-              <div class="bridge__icon">
-                <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="#ffffff" stroke-width="1.2" stroke-linecap="round">
-                  <!-- 안에서 바깥으로 커지는 나선 -->
-                  <path d="M60,60
-                    C60,52 68,48 72,56
-                    C76,64 64,72 56,68
-                    C44,62 48,44 60,40
-                    C76,34 88,52 84,68
-                    C78,90 52,96 40,84
-                    C24,68 32,36 56,28
-                    C80,20 100,48 96,76" opacity="0.7"/>
-                  <!-- 나선 끝에 작은 점 -->
-                  <circle cx="96" cy="76" r="3" fill="#ffffff" stroke="none" opacity="0.6"/>
+              <div class="bridge__icon bridge__icon--base">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 272 267" fill="none">
+                  <g stroke-width="0.5"><path fill="#1C1C1E" stroke="rgba(255,255,255,0.3)" d="M137.044 107.668a1.44 1.44 0 0 1 1.288 0l115.686 57.843a3.13 3.13 0 0 1 1.73 2.8v20.529a1.44 1.44 0 0 1-.796 1.288l-1.69.845a1.44 1.44 0 0 1-1.288 0l-115.686-57.843a3.13 3.13 0 0 1-1.73-2.8v-20.529c0-.545.308-1.044.796-1.288z"/><path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="M137.689 110.446l113.061 56.531a3.38 3.38 0 0 1 1.868 3.023v18.193"/></g>
+                  <g stroke-width="0.5"><path fill="#1C1C1E" stroke="rgba(255,255,255,0.3)" d="M128.594 98.378a1.44 1.44 0 0 1 1.288 0l115.686 57.843a3.13 3.13 0 0 1 1.73 2.8v34.049a1.44 1.44 0 0 1-.796 1.288l-1.69.845a1.44 1.44 0 0 1-1.288 0l-115.686-57.843a3.13 3.13 0 0 1-1.73-2.8v-34.049c0-.545.308-1.044.796-1.288z"/><path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="M129.239 101.156l113.061 56.531a3.38 3.38 0 0 1 1.868 3.023v31.713"/></g>
+                  <g stroke-width="0.5"><path fill="#1C1C1E" stroke="rgba(255,255,255,0.3)" d="M120.144 82.316a1.44 1.44 0 0 1 1.288 0l115.686 57.843a3.13 3.13 0 0 1 1.73 2.8v54.331a1.44 1.44 0 0 1-.796 1.288l-1.69.845a1.44 1.44 0 0 1-1.288 0l-115.686-57.843a3.13 3.13 0 0 1-1.73-2.8v-54.331c0-.545.308-1.044.796-1.288z"/><path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="M120.789 85.094l113.061 56.531a3.38 3.38 0 0 1 1.868 3.023v51.995"/></g>
+                  <g stroke-width="0.5"><path fill="#1C1C1E" stroke="rgba(255,255,255,0.3)" d="M111.694 59.504a1.44 1.44 0 0 1 1.288 0l115.686 57.843a3.13 3.13 0 0 1 1.73 2.8v81.373a1.44 1.44 0 0 1-.796 1.288l-1.69.845a1.44 1.44 0 0 1-1.288 0l-115.686-57.843a3.13 3.13 0 0 1-1.73-2.8v-81.373c0-.545.308-1.044.796-1.288z"/><path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="M112.339 62.282l113.061 56.531a3.38 3.38 0 0 1 1.868 3.023v79.037"/></g>
+                  <g stroke-width="0.5"><path fill="#1C1C1E" stroke="rgba(255,255,255,0.3)" d="M103.244 16.4a1.44 1.44 0 0 1 1.288 0l115.686 57.843a3.13 3.13 0 0 1 1.73 2.8v128.697a1.44 1.44 0 0 1-.796 1.288l-1.69.845a1.44 1.44 0 0 1-1.288 0l-115.686-57.843a3.13 3.13 0 0 1-1.73-2.8V19.2c0-.545.308-1.044.796-1.288z"/><path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="M103.889 19.178l113.061 56.531a3.38 3.38 0 0 1 1.868 3.023v126.361"/></g>
+                  <g stroke-width="0.5"><path fill="#1C1C1E" stroke="rgba(255,255,255,0.3)" d="M94.794 67.954a1.44 1.44 0 0 1 1.288 0l115.686 57.843a3.13 3.13 0 0 1 1.73 2.8v81.373a1.44 1.44 0 0 1-.796 1.288l-1.69.845a1.44 1.44 0 0 1-1.288 0l-115.686-57.843a3.13 3.13 0 0 1-1.73-2.8v-81.373c0-.545.308-1.044.796-1.288z"/><path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="M95.439 70.732l113.061 56.531a3.38 3.38 0 0 1 1.868 3.023v79.037"/></g>
+                  <g stroke-width="0.5"><path fill="#1C1C1E" stroke="rgba(255,255,255,0.3)" d="M86.344 99.216a1.44 1.44 0 0 1 1.288 0l115.686 57.843a3.13 3.13 0 0 1 1.73 2.8v54.331a1.44 1.44 0 0 1-.796 1.288l-1.69.845a1.44 1.44 0 0 1-1.288 0l-115.686-57.843a3.13 3.13 0 0 1-1.73-2.8v-54.331c0-.545.308-1.044.796-1.288z"/><path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="M86.989 101.994l113.061 56.531a3.38 3.38 0 0 1 1.868 3.023v51.995"/></g>
+                  <g stroke-width="0.5"><path fill="#1C1C1E" stroke="rgba(255,255,255,0.3)" d="M77.894 123.728a1.44 1.44 0 0 1 1.288 0l115.686 57.843a3.13 3.13 0 0 1 1.73 2.8v34.049a1.44 1.44 0 0 1-.796 1.288l-1.69.845a1.44 1.44 0 0 1-1.288 0l-115.686-57.843a3.13 3.13 0 0 1-1.73-2.8v-34.049c0-.545.308-1.044.796-1.288z"/><path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="M78.539 126.506l113.061 56.531a3.38 3.38 0 0 1 1.868 3.023v31.713"/></g>
+                  <g stroke-width="0.5"><path fill="#1C1C1E" stroke="rgba(255,255,255,0.3)" d="M69.444 141.478a1.44 1.44 0 0 1 1.288 0l115.686 57.843a3.13 3.13 0 0 1 1.73 2.8v20.529a1.44 1.44 0 0 1-.796 1.288l-1.69.845a1.44 1.44 0 0 1-1.288 0l-115.686-57.843a3.13 3.13 0 0 1-1.73-2.8v-20.529c0-.545.308-1.044.796-1.288z"/><path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="M70.089 144.256l113.061 56.531a3.38 3.38 0 0 1 1.868 3.023v18.193"/></g>
+                  <g stroke-width="0.5"><path fill="#1C1C1E" stroke="rgba(255,255,255,0.3)" d="M60.994 152.459a1.44 1.44 0 0 1 1.288 0l115.686 57.843a3.13 3.13 0 0 1 1.73 2.8v13.768a1.44 1.44 0 0 1-.796 1.288l-1.69.845a1.44 1.44 0 0 1-1.288 0l-115.686-57.843a3.13 3.13 0 0 1-1.73-2.8v-13.768c0-.545.308-1.044.796-1.288z"/><path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="M61.639 155.237l113.061 56.531a3.38 3.38 0 0 1 1.868 3.023v11.432"/></g>
+                  <g stroke-width="0.5"><path fill="#1C1C1E" stroke="rgba(255,255,255,0.3)" d="M52.544 160.06a1.44 1.44 0 0 1 1.288 0l115.686 57.843a3.13 3.13 0 0 1 1.73 2.8v10.387a1.44 1.44 0 0 1-.796 1.288l-1.69.845a1.44 1.44 0 0 1-1.288 0l-115.686-57.843a3.13 3.13 0 0 1-1.73-2.8v-10.387c0-.545.308-1.044.796-1.288z"/><path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="M53.189 162.838l113.061 56.531a3.38 3.38 0 0 1 1.868 3.023v8.051"/></g>
+                  <g stroke-width="0.5"><path fill="#1C1C1E" stroke="rgba(255,255,255,0.3)" d="M44.094 165.979a1.44 1.44 0 0 1 1.288 0l115.686 57.843a3.13 3.13 0 0 1 1.73 2.8v8.698a1.44 1.44 0 0 1-.796 1.288l-1.69.845a1.44 1.44 0 0 1-1.288 0l-115.686-57.843a3.13 3.13 0 0 1-1.73-2.8v-8.698c0-.545.308-1.044.796-1.288z"/><path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="M44.739 168.757l113.061 56.531a3.38 3.38 0 0 1 1.868 3.023v6.362"/></g>
+                  <g stroke-width="0.5"><path fill="#1C1C1E" stroke="rgba(255,255,255,0.3)" d="M35.634 171.055a1.44 1.44 0 0 1 1.288 0l115.686 57.843a3.13 3.13 0 0 1 1.73 2.8v7.852a1.44 1.44 0 0 1-.796 1.288l-1.69.845a1.44 1.44 0 0 1-1.288 0l-115.686-57.843a3.13 3.13 0 0 1-1.73-2.8v-7.852c0-.545.308-1.044.796-1.288z"/><path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="M36.279 173.833l113.061 56.531a3.38 3.38 0 0 1 1.868 3.023v5.516"/></g>
+                  <g stroke-width="0.5"><path fill="#1C1C1E" stroke="rgba(255,255,255,0.3)" d="M27.184 175.274a1.44 1.44 0 0 1 1.288 0l115.686 57.843a3.13 3.13 0 0 1 1.73 2.8v7.853a1.44 1.44 0 0 1-.796 1.288l-1.69.845a1.44 1.44 0 0 1-1.288 0l-115.686-57.843a3.13 3.13 0 0 1-1.73-2.8v-7.853c0-.545.308-1.044.796-1.288z"/><path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="M27.829 178.052l113.061 56.531a3.38 3.38 0 0 1 1.868 3.023v5.517"/></g>
+                  <g stroke-width="0.5"><path fill="#1C1C1E" stroke="rgba(255,255,255,0.3)" d="M18.734 179.504a1.44 1.44 0 0 1 1.288 0l115.686 57.843a3.13 3.13 0 0 1 1.73 2.8v7.853a1.44 1.44 0 0 1-.796 1.288l-1.69.845a1.44 1.44 0 0 1-1.288 0l-115.686-57.843a3.13 3.13 0 0 1-1.73-2.8v-7.853c0-.545.308-1.044.796-1.288z"/><path stroke="rgba(255,255,255,0.1)" stroke-linecap="round" d="M19.379 182.282l113.061 56.531a3.38 3.38 0 0 1 1.868 3.023v5.517"/></g>
                 </svg>
               </div>
               <h3 class="bridge__title">진화하는 관계</h3>
-              <p class="bridge__desc">대화가 쌓일수록 깊어지는<br>역할, 그리고 관계</p>
+              <p class="bridge__desc">대화가 쌓일수록 깊어지는 이해로<br>변화하는 역할, 그리고 관계</p>
             </div>
 
           </div>
@@ -1375,7 +1437,7 @@
             <div class="ending__field"><input type="text" name="organization" placeholder="소속" required autocomplete="off"></div>
             <div class="ending__field"><input type="email" name="email" placeholder="이메일" required autocomplete="off"></div>
             <div class="ending__field"><input type="tel" name="phone" placeholder="연락처 (선택)" autocomplete="off"></div>
-            <div class="ending__field"><textarea name="memo" placeholder="메모 (선택)" rows="3"></textarea></div>
+            <div class="ending__field"><textarea name="memo" placeholder="남기시는 글 (선택)" rows="3"></textarea></div>
             <button class="ending__submit" type="submit">요청하기</button>
           </form>
           <div class="ending__success" style="display:none;">
@@ -1605,6 +1667,7 @@
       gsap.set('.solution-intro__text', { opacity: 1 });
       gsap.set('.solution-intro__sub .word', { opacity: 1, filter: 'none' });
       gsap.set('.demo__snippet', { opacity: 1 });
+      gsap.set('.bridge__framing', { opacity: 1 });
       gsap.set('.ending__brand .word', { opacity: 1, filter: 'none' });
       gsap.set(['.kick__sub', '.kick__main'], { opacity: 1 });
       gsap.set('.kick__grid', { opacity: 1 });
@@ -1904,26 +1967,26 @@
         start: 'top 80%',
         onEnter: function () {
           gsap.fromTo('.solution-intro__text',
-            { opacity: 0, filter: 'blur(8px)' },
+            { opacity: 0, filter: 'blur(6px)' },
             { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out' }
           );
           animateWords('.solution-intro__sub', 0.7);
         },
         onEnterBack: function () {
           gsap.fromTo('.solution-intro__text',
-            { opacity: 0, filter: 'blur(8px)' },
+            { opacity: 0, filter: 'blur(6px)' },
             { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out' }
           );
           animateWords('.solution-intro__sub', 0.7);
         },
         onLeave: function () {
           gsap.killTweensOf('.solution-intro__text');
-          gsap.set('.solution-intro__text', { opacity: 0, filter: 'blur(8px)' });
+          gsap.set('.solution-intro__text', { opacity: 0, filter: 'blur(6px)' });
           resetWords('.solution-intro__sub');
         },
         onLeaveBack: function () {
           gsap.killTweensOf('.solution-intro__text');
-          gsap.set('.solution-intro__text', { opacity: 0, filter: 'blur(8px)' });
+          gsap.set('.solution-intro__text', { opacity: 0, filter: 'blur(6px)' });
           resetWords('.solution-intro__sub');
         }
       });
@@ -1996,39 +2059,34 @@
         }
       );
 
-      // ── solution-bridge: 파도형 stagger 진입 ──
+      // ── solution-bridge: 프레이밍 → 파도형 stagger 진입 ──
+      function bridgeEnter() {
+        gsap.fromTo('.bridge__framing',
+          { opacity: 0, filter: 'blur(6px)' },
+          { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out' });
+        var cols = document.querySelectorAll('.bridge__column');
+        var yOffsets = [50, 40, 30];
+        cols.forEach(function(col, i) {
+          gsap.fromTo(col,
+            { opacity: 0, y: yOffsets[i] },
+            { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', delay: 0.5 + i * 0.25 }
+          );
+        });
+      }
+      function bridgeLeave() {
+        gsap.killTweensOf('.bridge__framing');
+        gsap.set('.bridge__framing', { opacity: 0, filter: 'blur(6px)' });
+        gsap.killTweensOf('.bridge__column');
+        gsap.set('.bridge__column', { opacity: 0, y: 40 });
+      }
       ScrollTrigger.create({
         trigger: '#solution-bridge',
         scroller: wrapper,
         start: 'top 80%',
-        onEnter: function () {
-          var cols = document.querySelectorAll('.bridge__column');
-          var yOffsets = [50, 40, 30];
-          cols.forEach(function(col, i) {
-            gsap.fromTo(col,
-              { opacity: 0, y: yOffsets[i] },
-              { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', delay: i * 0.25 }
-            );
-          });
-        },
-        onEnterBack: function () {
-          var cols = document.querySelectorAll('.bridge__column');
-          var yOffsets = [50, 40, 30];
-          cols.forEach(function(col, i) {
-            gsap.fromTo(col,
-              { opacity: 0, y: yOffsets[i] },
-              { opacity: 1, y: 0, duration: 0.9, ease: 'power2.out', delay: i * 0.25 }
-            );
-          });
-        },
-        onLeave: function () {
-          gsap.killTweensOf('.bridge__column');
-          gsap.set('.bridge__column', { opacity: 0, y: 40 });
-        },
-        onLeaveBack: function () {
-          gsap.killTweensOf('.bridge__column');
-          gsap.set('.bridge__column', { opacity: 0, y: 40 });
-        }
+        onEnter: bridgeEnter,
+        onEnterBack: bridgeEnter,
+        onLeave: bridgeLeave,
+        onLeaveBack: bridgeLeave
       });
 
       // ── kick: 구조선 드로잉 + 느린 텍스트 fade ──
@@ -2077,25 +2135,27 @@
       })();
 
       function kickEnter() {
-        // 시퀀스: 보조 fade(0s) → 구조선 드로잉(1.0s) → 메인 느린 fade(2.2s)
-        // 1) 보조 텍스트 먼저
+        // 시퀀스: 보조 blur fade(0s) → 구조선 드로잉(0.5s) → 메인 느린 fade(1.5s)
+        // 1) 보조 텍스트 먼저 — S3 동일 연출
         gsap.fromTo('.kick__sub',
-          { opacity: 0 }, { opacity: 1, duration: 2.0, ease: 'power1.out' });
+          { opacity: 0, filter: 'blur(6px)' },
+          { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out' });
         // 2) 구조선 드로잉 — 보조가 반쯤 드러난 후 시작
         gsap.set('.kick__grid', { opacity: 1 });
         kickGridLines.forEach(function (l) {
           gsap.fromTo(l.el,
             { attr: { 'stroke-dashoffset': l.reverse ? -l.len : l.len } },
-            { attr: { 'stroke-dashoffset': 0 }, duration: l.dur, delay: 1.0 + l.delay, ease: 'power2.out' }
+            { attr: { 'stroke-dashoffset': 0 }, duration: l.dur, delay: 0.5 + l.delay, ease: 'power2.out' }
           );
         });
         // 3) 메인 텍스트 — 구조선 위에 서서히 드러남
         gsap.fromTo('.kick__main',
-          { opacity: 0 }, { opacity: 1, duration: 2.5, ease: 'power1.out', delay: 2.0 });
+          { opacity: 0 }, { opacity: 1, duration: 2.5, ease: 'power1.out', delay: 1.5 });
       }
       function kickLeave() {
         gsap.killTweensOf(['.kick__sub', '.kick__main']);
-        gsap.set(['.kick__sub', '.kick__main'], { opacity: 0 });
+        gsap.set('.kick__sub', { opacity: 0, filter: 'blur(6px)' });
+        gsap.set('.kick__main', { opacity: 0 });
         // 선 초기화: 진행 중 트윈 kill → dashoffset 원복
         kickGridLines.forEach(function (l) {
           gsap.killTweensOf(l.el);
