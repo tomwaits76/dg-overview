@@ -1718,6 +1718,46 @@
       }
     }, { passive: false, capture: true });
 
+    // ── 모바일 터치 snap (데스크톱 wheel snap과 동일 패턴) ──
+    (function () {
+      var touchStartY = 0;
+      var touchDelta = 0;
+      var isTouching = false;
+
+      wrapper.addEventListener('touchstart', function (e) {
+        if (!sectionSnap.scrollReady) return;
+        if (sectionSnap.isAnimating || sectionSnap.isCoolingDown) return;
+        touchStartY = e.touches[0].clientY;
+        touchDelta = 0;
+        isTouching = true;
+      }, { passive: true });
+
+      wrapper.addEventListener('touchmove', function (e) {
+        if (!isTouching) return;
+        if (sectionSnap.isAnimating || sectionSnap.isCoolingDown) {
+          e.preventDefault();
+          return;
+        }
+        touchDelta = touchStartY - e.touches[0].clientY;
+        if (Math.abs(touchDelta) >= sectionSnap.threshold) {
+          e.preventDefault();
+        }
+      }, { passive: false });
+
+      wrapper.addEventListener('touchend', function () {
+        if (!isTouching) return;
+        isTouching = false;
+        if (sectionSnap.isAnimating || sectionSnap.isCoolingDown) return;
+
+        if (Math.abs(touchDelta) >= sectionSnap.threshold) {
+          var direction = touchDelta > 0 ? 1 : -1;
+          sectionSnap.syncIndex();
+          sectionSnap.snapTo(sectionSnap.lastSnappedIndex + direction);
+        }
+        touchDelta = 0;
+      }, { passive: true });
+    })();
+
     // ── Cosmos-style word stagger 유틸 ──
     // cosmos.so "They were built to keep you scrolling" 실제 구현:
     //   각 단어 = motion.span, opacity:0 y:30 blur(6px) → visible
@@ -2172,6 +2212,10 @@
 
       // ── solution-bridge: 프레이밍 → 파도형 stagger 진입 ──
       function bridgeEnter() {
+        gsap.killTweensOf('.bridge__framing');
+        gsap.killTweensOf('.bridge__column');
+        gsap.set('.bridge__framing', { opacity: 0, filter: 'blur(6px)' });
+        gsap.set('.bridge__column', { opacity: 0 });
         gsap.fromTo('.bridge__framing',
           { opacity: 0, filter: 'blur(6px)' },
           { opacity: 1, filter: 'blur(0px)', duration: 1.0, ease: 'power2.out' });

@@ -243,7 +243,7 @@ bg-stage에서 Terracotta→dark crossfade (히어로→섹션2 전환).
 2. 섹션 간 전환: 중앙 앵커 비대칭 (퇴장=올라가며 fade, 등장=제자리 fade).
 3. 스크롤 연동(scrub: true)은 히어로 퇴장 + 배경 전환에만 사용. 나머지 모든 섹션 내 연출은 whileInView time-based.
 4. 파동 연출: CSS @keyframes 또는 SVG animate. GSAP이 아닌 자체 루프.
-5. sectionSnap: 휠 누적 delta 기반 섹션 점프. 현재 구현 유지.
+5. sectionSnap: 휠 누적 delta(데스크톱) + 터치 swipe(모바일) 기반 섹션 점프. 동일한 snapTo() 인프라 공유.
 
 ---
 
@@ -252,6 +252,8 @@ bg-stage에서 Terracotta→dark crossfade (히어로→섹션2 전환).
 - **데스크탑 우선**. 투자자는 주로 데스크탑/노트북에서 확인.
 - **모바일 대응 필수**. 디바이스 목업 크기, 텍스트 사이즈, 레이아웃 조정.
 - **디바이스 목업**: 모바일에서 크기 축소, 스니펫 배치 조정.
+- **모바일 터치 snap**: 데스크톱 wheel snap과 동일한 섹션 점프를 터치 swipe로 구현. 임계값 150px, 동일 snapTo() 사용.
+- **S8 폼 모바일 최적화**: 모바일에서 content padding, field 간격, input padding 축소하여 submit 버튼 잘림 방지.
 
 ---
 
