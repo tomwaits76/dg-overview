@@ -935,9 +935,10 @@
     .ending__field input:-webkit-autofill:focus,
     .ending__field input:-webkit-autofill:active {
       -webkit-text-fill-color: var(--white) !important;
-      -webkit-box-shadow: 0 0 0 9999px #D4725A inset !important;
-      box-shadow: 0 0 0 9999px #D4725A inset !important;
+      -webkit-box-shadow: 0 0 0 9999px rgba(255, 255, 255, 0.08) inset !important;
+      box-shadow: 0 0 0 9999px rgba(255, 255, 255, 0.08) inset !important;
       caret-color: var(--white);
+      transition: background-color 9999s 9999s;
     }
 
     .ending__submit {
@@ -2319,10 +2320,11 @@
         endingContent.style.transform = 'translateX(-50%)';
 
         cta.style.display = 'none';
-        gsap.to('.ending__brand', { opacity: 0, duration: 0.35, ease: 'sine.inOut' });
-        form.style.display = 'block';
-        gsap.fromTo(form, { opacity: 0, maxHeight: 0 }, { opacity: 1, maxHeight: 600, duration: 0.6, ease: 'power2.out' });
-        form.style.overflow = 'hidden';
+        gsap.to('.ending__brand', { opacity: 0, duration: 0.35, ease: 'sine.inOut', onComplete: function () {
+          form.style.display = 'block';
+          form.style.overflow = 'hidden';
+          gsap.fromTo(form, { opacity: 0, maxHeight: 0 }, { opacity: 1, maxHeight: 600, duration: 0.6, ease: 'power2.out' });
+        }});
       });
 
       // 폼 제출
