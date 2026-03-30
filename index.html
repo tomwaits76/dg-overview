@@ -2306,13 +2306,24 @@
       var success = document.querySelector('.ending__success');
       if (!cta || !form) return;
 
-      // CTA 클릭 → 브랜드 텍스트 퇴장 후 폼 등장 (순차)
+      // CTA 클릭 → lead 위치 고정 + 브랜드 텍스트 퇴장 + 폼 펼침
+      var endingSection = document.querySelector('#ending');
+      var endingContent = document.querySelector('.ending__content');
       cta.addEventListener('click', function () {
+        // lead 텍스트의 현재 위치를 계산하여 고정
+        var contentRect = endingContent.getBoundingClientRect();
+        var sectionRect = endingSection.getBoundingClientRect();
+        var currentTop = contentRect.top - sectionRect.top;
+        endingContent.style.position = 'absolute';
+        endingContent.style.top = currentTop + 'px';
+        endingContent.style.left = '50%';
+        endingContent.style.transform = 'translateX(-50%)';
+
         cta.style.display = 'none';
-        gsap.to('.ending__brand', { opacity: 0, duration: 0.35, ease: 'sine.inOut', onComplete: function () {
-          form.style.display = 'block';
-          gsap.fromTo(form, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
-        }});
+        gsap.to('.ending__brand', { opacity: 0, duration: 0.35, ease: 'sine.inOut' });
+        form.style.display = 'block';
+        gsap.fromTo(form, { opacity: 0, maxHeight: 0 }, { opacity: 1, maxHeight: 600, duration: 0.6, ease: 'power2.out' });
+        form.style.overflow = 'hidden';
       });
 
       // 폼 제출
