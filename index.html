@@ -1527,7 +1527,7 @@
             <button class="ending__submit" type="submit">요청하기</button>
           </form>
           <div class="ending__success" style="display:none;">
-            <p>감사합니다. 곧 연락드리겠습니다.</p>
+            <p>고맙습니다. 곧 연락드리겠습니다.</p>
           </div>
         </div>
         <p class="ending__brand">모두에게 열려 있지만, 당신에게만 깊어지는 벗</p>
@@ -2309,7 +2309,7 @@
       // CTA 클릭 → 폼 슬라이드 + 브랜드 텍스트 fade-out
       cta.addEventListener('click', function () {
         cta.style.display = 'none';
-        gsap.to('.ending__brand', { opacity: 0, duration: 0.4, ease: 'power2.out' });
+        gsap.to('.ending__brand', { opacity: 0, duration: 0.8, ease: 'sine.inOut' });
         form.style.display = 'block';
         gsap.fromTo(form, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
       });
@@ -2336,7 +2336,7 @@
                 form.style.display = 'none';
                 success.style.display = 'block';
                 gsap.fromTo(success, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out' });
-                gsap.to('.ending__brand', { opacity: 1, duration: 0.8, delay: 0.4, ease: 'power2.out' });
+                gsap.to('.ending__brand', { opacity: 1, duration: 1.2, delay: 0.8, ease: 'sine.inOut' });
               }, 800);
             } else {
               submitBtn.textContent = '요청 실패';
