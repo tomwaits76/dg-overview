@@ -2306,12 +2306,13 @@
       var success = document.querySelector('.ending__success');
       if (!cta || !form) return;
 
-      // CTA 클릭 → 폼 슬라이드 + 브랜드 텍스트 fade-out
+      // CTA 클릭 → 브랜드 텍스트 퇴장 후 폼 등장 (순차)
       cta.addEventListener('click', function () {
         cta.style.display = 'none';
-        gsap.to('.ending__brand', { opacity: 0, duration: 0.8, ease: 'sine.inOut' });
-        form.style.display = 'block';
-        gsap.fromTo(form, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
+        gsap.to('.ending__brand', { opacity: 0, duration: 0.35, ease: 'sine.inOut', onComplete: function () {
+          form.style.display = 'block';
+          gsap.fromTo(form, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
+        }});
       });
 
       // 폼 제출
