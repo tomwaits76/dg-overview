@@ -1131,6 +1131,25 @@
         bottom: 24px;
       }
 
+      /* S3(problem-2) 모바일 텍스트 스케일링 */
+      #problem-2 .problem__headline {
+        font-size: clamp(11px, 3.6vw, 18px);
+      }
+      #problem-2 .problem__body {
+        font-size: clamp(16px, 5.6vw, 28px);
+      }
+
+      /* S4(solution-intro) 모바일 텍스트 스케일링 */
+      .solution-intro__text {
+        font-size: clamp(11px, 3.6vw, 18px);
+      }
+      .solution-intro__sub {
+        font-size: clamp(16px, 5.6vw, 28px);
+      }
+      .solution-intro__content {
+        padding: 0 24px;
+      }
+
     }
   </style>
 </head>
@@ -2287,9 +2306,10 @@
       var success = document.querySelector('.ending__success');
       if (!cta || !form) return;
 
-      // CTA 클릭 → 폼 슬라이드
+      // CTA 클릭 → 폼 슬라이드 + 브랜드 텍스트 fade-out
       cta.addEventListener('click', function () {
         cta.style.display = 'none';
+        gsap.to('.ending__brand', { opacity: 0, duration: 0.4, ease: 'power2.out' });
         form.style.display = 'block';
         gsap.fromTo(form, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' });
       });
@@ -2316,6 +2336,7 @@
                 form.style.display = 'none';
                 success.style.display = 'block';
                 gsap.fromTo(success, { opacity: 0 }, { opacity: 1, duration: 0.6, ease: 'power1.out' });
+                gsap.to('.ending__brand', { opacity: 1, duration: 0.8, delay: 0.4, ease: 'power2.out' });
               }, 800);
             } else {
               submitBtn.textContent = '요청 실패';
